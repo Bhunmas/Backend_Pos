@@ -7,7 +7,9 @@ export class InOrderDbRespositoryDB implements IOrderDbResponsitory{
     
     private OrderDB:OrderDb[]=[];
     private Mysql:Mysql= new Mysql();
-
+    connect(): void {
+        
+    }
     async readOne(id: number): Promise<OrderDb> {
         return await this.Mysql.readOne(id)
     }
