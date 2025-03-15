@@ -6,5 +6,6 @@ export interface IOrderDbResponsitory{
     addOrder(value:OrderDb):Promise<any>;
     addOrders(value:OrderDb[]):void;
     connect():void;
+    readOneCatagory(catagory:string):Promise<OrderDb>;
 
 }

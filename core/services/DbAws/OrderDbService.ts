@@ -16,11 +16,17 @@ export class OrderDbService{
     }
 
     readOne(id:number){
-    
+      
+        console.log('any :',id)
         return  this.orderRespository.readOne(id);
     }
 
     readOrder(){
         return  this.orderRespository.readAll()
     }
+    
+    readCatagory(){
+        return this.orderRespository.readOneCatagory("Milk Tea")
+    }
+
 }

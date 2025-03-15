@@ -33,12 +33,23 @@ export function createProductController(productService:ProductService,orderServi
            
         }).catch((err) => {
             // set error and error response 
+            if(err == "error") return {"message":"Data is not number","statusCode":404}
             if(err.rowCount<= 0) return {"message":"Data not found","statusCode":404}
             
         });
         
         res.status(200).send(result);
     });
+
+    router.get("/milktea",async (_req: Request, res: Response) => {
+        // wait api 
+        const result = await postgresProduct.readCatagory().then((res)=>{
+            return {"message":"Success","statusCode":200,"result":res}
+        })
+        console.log("results :",result);
+        res.status(200).send(result);
+    });
+
 
     return router;
 

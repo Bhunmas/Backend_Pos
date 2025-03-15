@@ -24,5 +24,12 @@ export class InOrderDbRespositoryDB implements IOrderDbResponsitory{
     addOrders(value: OrderDb[]): void {
         
     }
+    readOneCatagory(catagory: string): Promise<OrderDb> {
+        return  new Promise(async(resolve, reject) => {
+           
+           
+           
+        })
+    }
 }
 

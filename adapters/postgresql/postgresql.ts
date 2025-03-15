@@ -1,6 +1,7 @@
 import { Pool } from 'pg';
 import { IOrderDbResponsitory } from "../../core/ports/IDbResponsitory";
 import { OrderDb } from '../../core/entites/DbAws/OrderDb';
+import { error } from 'console';
 
 export class InPostgresqlProductRepository implements IOrderDbResponsitory {
     private client: any = new Pool({
@@ -35,6 +36,10 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
     }
     readOne(id: number): Promise<OrderDb> {
         return new Promise(async(resolve, reject) => {
+            if(Number.isNaN(id)){
+                reject("error");
+                return;
+            }
             const connect = await this.client.connect();
             const res = await this.client.query(`SELECT * FROM products WHERE product_id = ${id}`);
             if(res.rows.length <= 0){
@@ -47,6 +52,23 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
            
         })
     }
+
+    readOneCatagory(catagory: string): Promise<OrderDb> {
+        return new Promise(async(resolve, reject) => {
+           console.log("Milk Tea :",catagory)
+            const connect = await this.client.connect();
+            const res = await this.client.query(`SELECT * FROM products WHERE category = '${catagory}'`);
+            if(res.rows.length <= 0){
+                reject(res);
+                connect.release();
+                return 
+            }
+            resolve(res.rows);
+            connect.release();
+           
+        })
+    }
+
     addOrder(value: OrderDb): Promise<any> {
         return new Promise((resolve, reject) => {
             resolve([this.result]);
