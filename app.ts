@@ -11,11 +11,16 @@ import { InMemoryProductRepository } from "./adapters/respositories/InMemoryProd
 import { InMemoryCustomerRepository } from "./adapters/respositories/InMemoryCustomerRepository"; 
 import { InPostgresqlProductRepository } from "./adapters/postgresql/postgresql"; 
 import express from "express";
+const cors = require('cors');
 
 
 
 const app = express();
+const configCors = {
+    origin: process.env.CORS_CONFIG
+}
 
+app.use(cors(configCors));
 app.use(express.json());
 // ✅ สร้าง Repository และ Service
 const productRepository = new InMemoryProductRepository();
@@ -35,4 +40,4 @@ const productPostgresqlService = new OrderDbService(productPostgresqlRepository)
 app.use("/products", createProductController(productService,orderService,productPostgresqlService));
 app.use("/customers", createCustomerController(customerService));
 
-app.listen(3000,'0.0.0.0', () => console.log("Server running on port 3000"));
+app.listen(4000,'0.0.0.0', () => console.log("Server running on port 4000"));

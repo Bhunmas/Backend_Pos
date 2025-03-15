@@ -58,7 +58,7 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
            
             const connect = await this.client.connect();
             const res = await this.client.query(`SELECT * FROM products WHERE category = '${catagory}' ORDER BY  product_id ASC`);
-            console.log("Res :",res)
+            console.log("Res :",catagory)
             if(res.rows.length <= 0){
                 reject(res);
                 connect.release();
