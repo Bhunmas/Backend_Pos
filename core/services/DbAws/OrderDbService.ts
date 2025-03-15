@@ -25,8 +25,8 @@ export class OrderDbService{
         return  this.orderRespository.readAll()
     }
     
-    readCatagory(){
-        return this.orderRespository.readOneCatagory("Milk Tea")
+    readCatagory(catagory:string){
+        return this.orderRespository.readOneCatagory(catagory)
     }
 
 }

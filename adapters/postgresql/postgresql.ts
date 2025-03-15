@@ -41,7 +41,7 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
                 return;
             }
             const connect = await this.client.connect();
-            const res = await this.client.query(`SELECT * FROM products WHERE product_id = ${id}`);
+            const res = await this.client.query(`SELECT * FROM products WHERE product_id = ${id} ORDER BY  product_id ASC`);
             if(res.rows.length <= 0){
                 reject(res);
                 connect.release();
@@ -55,9 +55,10 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
 
     readOneCatagory(catagory: string): Promise<OrderDb> {
         return new Promise(async(resolve, reject) => {
-           console.log("Milk Tea :",catagory)
+           
             const connect = await this.client.connect();
-            const res = await this.client.query(`SELECT * FROM products WHERE category = '${catagory}'`);
+            const res = await this.client.query(`SELECT * FROM products WHERE category = '${catagory}' ORDER BY  product_id ASC`);
+            console.log("Res :",res)
             if(res.rows.length <= 0){
                 reject(res);
                 connect.release();

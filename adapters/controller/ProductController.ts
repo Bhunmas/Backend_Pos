@@ -41,14 +41,24 @@ export function createProductController(productService:ProductService,orderServi
         res.status(200).send(result);
     });
 
-    router.get("/milktea",async (_req: Request, res: Response) => {
+    router.get("/catagory/:catagory",async (_req: Request, res: Response) => {
         // wait api 
-        const result = await postgresProduct.readCatagory().then((res)=>{
+        console.log("_req :",_req.params.catagory);
+        if(_req.params.catagory == "milktea") _req.params.catagory = "Milk Tea";
+        if(_req.params.catagory == "fruittea") _req.params.catagory = "Fruit Tea";
+        if(_req.params.catagory == "general") _req.params.catagory = "General";
+
+        const result = await postgresProduct.readCatagory(_req.params.catagory).then((res)=>{
             return {"message":"Success","statusCode":200,"result":res}
+        }).catch((err)=>{
+            if (_req.params.catagory == undefined) return {"message":"Data not found","statusCode":404}
+            return {"message":"Data not found","statusCode":404}
         })
         console.log("results :",result);
         res.status(200).send(result);
     });
+
+
 
 
     return router;
