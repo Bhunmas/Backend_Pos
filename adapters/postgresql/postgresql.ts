@@ -14,7 +14,7 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
         }
 
     });
-    private result: OrderDb = new OrderDb("dasd", "2");
+    private result: OrderDb = new OrderDb("", "", 0, "", false);
 
     async connect() {
 
@@ -35,45 +35,67 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
 
     }
     readOne(id: number): Promise<OrderDb> {
-        return new Promise(async(resolve, reject) => {
-            if(Number.isNaN(id)){
+        return new Promise(async (resolve, reject) => {
+            if (Number.isNaN(id)) {
                 reject("error");
                 return;
             }
             const connect = await this.client.connect();
             const res = await this.client.query(`SELECT * FROM products WHERE product_id = ${id} ORDER BY  product_id ASC`);
-            if(res.rows.length <= 0){
+            if (res.rows.length <= 0) {
                 reject(res);
                 connect.release();
-                return 
+                return
             }
             resolve(res.rows);
             connect.release();
-           
+
         })
     }
 
     readOneCatagory(catagory: string): Promise<OrderDb> {
-        return new Promise(async(resolve, reject) => {
-           
+        return new Promise(async (resolve, reject) => {
+
             const connect = await this.client.connect();
             const res = await this.client.query(`SELECT * FROM products WHERE category = '${catagory}' ORDER BY  product_id ASC`);
-            console.log("Res :",catagory)
-            if(res.rows.length <= 0){
+            console.log("Res :", catagory)
+            if (res.rows.length <= 0) {
                 reject(res);
                 connect.release();
-                return 
+                return
             }
             resolve(res.rows);
             connect.release();
-           
+
         })
     }
 
     addOrder(value: OrderDb): Promise<any> {
-        return new Promise((resolve, reject) => {
-            resolve([this.result]);
+        return new Promise(async (resolve, reject) => {
+            const connect = await this.client.connect();
+            const res = await this.client.query(`INSERT INTO products(product_name,price,category,active) values('${value.Order_name}',${value.Order_price},'${value.Order_category}',True)`);
+            resolve([]);
+            connect.release();
         })
+    }
+    updateOrder(value: OrderDb): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try{
+                const connect = await this.client.connect();
+                const seachResult =  this.client.query(`Select * from Products where product_id = ${value.Order_id}`);
+                if(seachResult.rows.length <= 0) throw Error('Data not found');
+                const res = await this.client.query('');
+                resolve([]);
+                connect.release();
+            }catch(error){
+                reject(error);
+            }
+           
+        })
+        
+    }
+    deleteOrder(id: number): void {
+
     }
     addOrders(value: OrderDb[]): void {
 

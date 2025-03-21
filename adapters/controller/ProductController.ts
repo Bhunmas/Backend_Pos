@@ -44,7 +44,7 @@ export function createProductController(productService: ProductService, orderSer
 
     router.get("/category/:category", async (_req: Request, res: Response) => {
         // wait api 
-        try{
+        try {
             switch (_req.params.category) {
                 case "milktea":
                     _req.params.category = "Milk Tea";
@@ -56,12 +56,12 @@ export function createProductController(productService: ProductService, orderSer
                     _req.params.category = "General";
                     break;
                 default:
-    
+
                     throw Error("Data not found")
                     break;
-                    
+
             }
-            console.log('_req.params.category : ',_req.params.category)
+            console.log('_req.params.category : ', _req.params.category)
             const result = await postgresProduct.readCatagory(_req.params.category).then((res) => {
                 return { "message": "Success", "statusCode": 200, "result": res }
             }).catch((err) => {
@@ -70,13 +70,30 @@ export function createProductController(productService: ProductService, orderSer
             })
             console.log("results :", result);
             res.status(200).send(result);
-        }catch(err){
-            
+        } catch (err) {
+
             res.status(404).send({ "message": "Data not found", "statusCode": 404 })
         }
-        
-        
-        
+
+
+
+    });
+
+    router.post("/create", async (_req: Request, res: Response) => {
+        // wait api 
+        console.log('item :', _req.body)
+        const result = await postgresProduct.addOrder(
+            {
+                Order_id: _req.body.Order_id,
+                Order_name: _req.body.Order_name,
+                Order_price: _req.body.Order_price,
+                Order_category: _req.body.Order_category,
+                Order_active: true
+            }).then((res) => {
+                return { "message": "Success", "statusCode": 200, "result": res }
+            })
+        console.log("results :", result);
+        res.status(200).send(result);
     });
 
 
