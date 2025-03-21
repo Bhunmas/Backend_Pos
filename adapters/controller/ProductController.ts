@@ -4,7 +4,7 @@ import { OrderDbService } from "../../core/services/DbAws/OrderDbService";
 import { stat } from "fs";
 
 
-export function createProductController(productService: ProductService, orderService: OrderDbService, postgresProduct: OrderDbService) {
+export function createProductController( postgresProduct: OrderDbService) {
     const router = Router();
 
     router.post("/products", async (req: Request, res: Response) => {
@@ -94,6 +94,24 @@ export function createProductController(productService: ProductService, orderSer
             })
         console.log("results :", result);
         res.status(200).send(result);
+    });
+
+    router.patch("/update", async (_req: Request, res: Response) => {
+        // wait api 
+      
+        const result = await postgresProduct.updateOrder(
+            {
+                Order_id: _req.body.Order_id,
+                Order_name: _req.body.Order_name,
+                Order_price: _req.body.Order_price,
+                Order_category: _req.body.Order_category,
+                Order_active: true
+            }).then((res) => {
+                return { "message": "Success", "statusCode": 200, "result": res }
+            })
+        console.log("results :", result);
+        res.status(200).send(result);
+     
     });
 
 

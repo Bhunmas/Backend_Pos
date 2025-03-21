@@ -2,16 +2,18 @@ import { Pool } from 'pg';
 import { IOrderDbResponsitory } from "../../core/ports/IDbResponsitory";
 import { OrderDb } from '../../core/entites/DbAws/OrderDb';
 import { error } from 'console';
-
+require('dotenv').config();
 export class InPostgresqlProductRepository implements IOrderDbResponsitory {
     private client: any = new Pool({
         user: process.env.USER_DATABASE,
         host: process.env.HOST_DATABASE,
         database: process.env.NAME_DATABASE,
-        password: process.env.PASSWORD_DATABASE,
-        ssl: {
-            rejectUnauthorized: false
-        }
+        password: String(process.env.PASSWORD_DATABASE),
+        port:process.env.PORT_DATABASE,
+        ssl:false
+        // ssl: {
+        //     rejectUnauthorized: false  // Adjust as needed for SSL setup
+        //   }
 
     });
     private result: OrderDb = new OrderDb("", "", 0, "", false);
@@ -41,7 +43,7 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
                 return;
             }
             const connect = await this.client.connect();
-            const res = await this.client.query(`SELECT * FROM products WHERE product_id = ${id} ORDER BY  product_id ASC`);
+            const res = await this.client.query(`SELECT * FROM products WHERE product_id = ${id} `);
             if (res.rows.length <= 0) {
                 reject(res);
                 connect.release();
@@ -83,9 +85,9 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
             try{
                 const connect = await this.client.connect();
                 const seachResult =  this.client.query(`Select * from Products where product_id = ${value.Order_id}`);
-                if(seachResult.rows.length <= 0) throw Error('Data not found');
-                const res = await this.client.query('');
-                resolve([]);
+                if(seachResult.rows <= 0) throw Error('Data not found');
+                const res = await this.client.query(`Update Products set product_name = '${value.Order_name}',price =${value.Order_price} ,category ='${value.Order_category}' where product_id = ${value.Order_id}`);
+                resolve(res);
                 connect.release();
             }catch(error){
                 reject(error);

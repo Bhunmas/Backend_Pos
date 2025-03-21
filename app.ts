@@ -28,8 +28,8 @@ const productService = new ProductService(productRepository);
 const customerRepository = new InMemoryCustomerRepository();
 const customerService = new CustomerService(customerRepository);
 
-const orderRepository = new InOrderDbRespositoryDB();
-const orderService = new OrderDbService(orderRepository);
+// const orderRepository = new InOrderDbRespositoryDB();
+// const orderService = new OrderDbService(orderRepository);
 
 const productPostgresqlRepository = new InPostgresqlProductRepository();
 const productPostgresqlService = new OrderDbService(productPostgresqlRepository);
@@ -37,7 +37,7 @@ const productPostgresqlService = new OrderDbService(productPostgresqlRepository)
 
 // ✅ เชื่อม Express กับ Controller
 
-app.use("/products", createProductController(productService,orderService,productPostgresqlService));
+app.use("/products", createProductController(productPostgresqlService));
 app.use("/customers", createCustomerController(customerService));
 
 app.listen(4000,'0.0.0.0', () => console.log("Server running on port 4000"));
