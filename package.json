@@ -1,0 +1,31 @@
+{
+  "name": "backend_pos",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Bhunmas/Backend_Pos.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Bhunmas/Backend_Pos/issues"
+  },
+  "homepage": "https://github.com/Bhunmas/Backend_Pos#readme",
+  "devDependencies": {
+    "@types/node": "^22.13.10",
+    "typescript": "^5.8.2"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "luxon": "^3.5.0",
+    "mysql2": "^3.14.0",
+    "pg": "^8.14.1"
+  }
+}
