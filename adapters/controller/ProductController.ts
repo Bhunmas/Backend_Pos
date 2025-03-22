@@ -107,7 +107,10 @@ export function createProductController( postgresProduct: OrderDbService) {
                 Order_category: _req.body.Order_category,
                 Order_active: true
             }).then((res) => {
-                return { "message": "Success", "statusCode": 200, "result": res }
+                return { "message": "Success", "statusCode": 200}
+            }).catch((res)=>{
+                if(res.rowCount <= 0) return { "message": "Data not found", "statusCode": 404 }
+                return { "message": "Data not found", "statusCode": 404 }
             })
         console.log("results :", result);
         res.status(200).send(result);
@@ -119,8 +122,9 @@ export function createProductController( postgresProduct: OrderDbService) {
       
         const result = await postgresProduct.active(
             _req.body.Order_id).then((res) => {
-                return { "message": "Success", "statusCode": 200, "result": res }
-            }).catch(()=>{
+                return { "message": "Success", "statusCode": 200 }
+            }).catch((res)=>{
+                if(res.rowCount <= 0) return { "message": "Data not found", "statusCode": 404 }
                 return { "message": "Data not found", "statusCode": 404 }
             })
         console.log("results :", result);
@@ -131,15 +135,12 @@ export function createProductController( postgresProduct: OrderDbService) {
     router.patch("/inactive", async (_req: Request, res: Response) => {
         // wait api 
       
-        const result = await postgresProduct.updateOrder(
-            {
-                Order_id: _req.body.Order_id,
-                Order_name: _req.body.Order_name,
-                Order_price: _req.body.Order_price,
-                Order_category: _req.body.Order_category,
-                Order_active: true
-            }).then((res) => {
-                return { "message": "Success", "statusCode": 200, "result": res }
+        const result = await postgresProduct.inactive(
+           _req.body.Order_id).then((res) => {
+                return { "message": "Success", "statusCode": 200 }
+            }).catch((res)=>{
+                if(res.rowCount <= 0) return { "message": "Data not found", "statusCode": 404 }
+                return { "message": "Data not found", "statusCode": 404 }
             })
         console.log("results :", result);
         res.status(200).send(result);

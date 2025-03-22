@@ -36,9 +36,9 @@ export class OrderDbService{
     active(valuebyid:number){
         return this.orderRespository.activeOrder(valuebyid);
     }
-    
+
     inactive(valuebyid:number){
-        return this.orderRespository.activeOrder(valuebyid);
+        return this.orderRespository.inactiveOrder(valuebyid);
     }
 
 

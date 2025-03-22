@@ -86,6 +86,7 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
                 const seachResult =  this.client.query(`Select * from Products where product_id = ${value.Order_id}`);
                 if(seachResult.rows <= 0) throw Error('Data not found');
                 const res = await this.client.query(`Update Products set product_name = '${value.Order_name}',price =${value.Order_price} ,category ='${value.Order_category}' where product_id = ${value.Order_id}`);
+                if(res.rowCount <= 0 ) reject(res);
                 resolve(res);
                 connect.release();
             }catch(error){
@@ -101,11 +102,20 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
             if(valuebyid == null ) reject([]);
             const connect = await this.client.connect();
             const res = this.client.query(`Update Products set active = true where product_id = ${valuebyid}`);
+            if(res.rowCount <= 0) reject(res);
             resolve(res)
+            connect.release();
         });
     }
     inactiveOrder(valuebyid: number): Promise<any>{
-        return new Promise((resolve,reject)=>{})
+        return new Promise(async(resolve,reject)=>{
+            if(valuebyid == null ) reject([]);
+            const connect = await this.client.connect();
+            const res = await this.client.query(`Update Products set active = false where product_id = ${valuebyid}`);
+            if(res.rowCount <= 0) reject(res);
+            resolve([]);
+            connect.release();
+        })
     }
     deleteOrder(id: number): void {
 
