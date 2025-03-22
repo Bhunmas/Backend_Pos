@@ -1,5 +1,4 @@
 import { Router, Request, Response } from "express";
-import { ProductService } from "../../core/services/ProductService";
 import { OrderDbService } from "../../core/services/DbAws/OrderDbService";
 import { stat } from "fs";
 
