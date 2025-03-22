@@ -33,4 +33,13 @@ export class OrderDbService{
         return this.orderRespository.readOneCatagory(catagory)
     }
 
+    active(valuebyid:number){
+        return this.orderRespository.activeOrder(valuebyid);
+    }
+    
+    inactive(valuebyid:number){
+        return this.orderRespository.activeOrder(valuebyid);
+    }
+
+
 }

@@ -57,7 +57,6 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
 
     readOneCatagory(catagory: string): Promise<OrderDb> {
         return new Promise(async (resolve, reject) => {
-
             const connect = await this.client.connect();
             const res = await this.client.query(`SELECT * FROM products WHERE category = '${catagory}' ORDER BY  product_id ASC`);
             console.log("Res :", catagory)
@@ -95,6 +94,18 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
            
         })
         
+    }
+
+    activeOrder(valuebyid: number): Promise<any>{
+        return new Promise(async(resolve,reject)=>{
+            if(valuebyid == null ) reject([]);
+            const connect = await this.client.connect();
+            const res = this.client.query(`Update Products set active = true where product_id = ${valuebyid}`);
+            resolve(res)
+        });
+    }
+    inactiveOrder(valuebyid: number): Promise<any>{
+        return new Promise((resolve,reject)=>{})
     }
     deleteOrder(id: number): void {
 

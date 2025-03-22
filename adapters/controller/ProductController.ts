@@ -7,15 +7,15 @@ import { stat } from "fs";
 export function createProductController( postgresProduct: OrderDbService) {
     const router = Router();
 
-    router.post("/products", async (req: Request, res: Response) => {
-        // wait api
+    // router.post("/products", async (req: Request, res: Response) => {
+    //     // wait api
 
-        const result = await postgresProduct.readOrder();
-        res.status(201).send({ message: "Success", result: result });
-        // const a = await orderService.addOrder({Order_id:req.body.Order_id,Order_name:req.body.Order_name});
-        // res.status(201).send(a);
-        // res.status(201).send({ message: "Product added", id: req.body.Order_id, name: req.body.Order_name });
-    });
+    //     const result = await postgresProduct.readOrder();
+    //     res.status(201).send({ message: "Success", result: result });
+    //     // const a = await orderService.addOrder({Order_id:req.body.Order_id,Order_name:req.body.Order_name});
+    //     // res.status(201).send(a);
+    //     // res.status(201).send({ message: "Product added", id: req.body.Order_id, name: req.body.Order_name });
+    // });
 
     router.get("/products", async (_req: Request, res: Response) => {
         // wait api 
@@ -113,6 +113,39 @@ export function createProductController( postgresProduct: OrderDbService) {
         res.status(200).send(result);
      
     });
+
+    router.patch("/active", async (_req: Request, res: Response) => {
+        // wait api 
+      
+        const result = await postgresProduct.active(
+            _req.body.Order_id).then((res) => {
+                return { "message": "Success", "statusCode": 200, "result": res }
+            }).catch(()=>{
+                return { "message": "Data not found", "statusCode": 404 }
+            })
+        console.log("results :", result);
+        res.status(200).send(result);
+     
+    });
+    
+    router.patch("/inactive", async (_req: Request, res: Response) => {
+        // wait api 
+      
+        const result = await postgresProduct.updateOrder(
+            {
+                Order_id: _req.body.Order_id,
+                Order_name: _req.body.Order_name,
+                Order_price: _req.body.Order_price,
+                Order_category: _req.body.Order_category,
+                Order_active: true
+            }).then((res) => {
+                return { "message": "Success", "statusCode": 200, "result": res }
+            })
+        console.log("results :", result);
+        res.status(200).send(result);
+     
+    });
+
 
 
 

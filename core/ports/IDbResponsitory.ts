@@ -7,6 +7,9 @@ export interface IOrderDbResponsitory{
     addOrders(value:OrderDb[]):void;
     connect():void;
     readOneCatagory(catagory:string):Promise<OrderDb>;
+    activeOrder(valuebyid:number):Promise<any>;
+    inactiveOrder(valuebyid:number):Promise<any>;
+
     updateOrder(value:OrderDb):Promise<any>;
     deleteOrder(id:number):void;
 
