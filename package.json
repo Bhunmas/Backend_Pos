@@ -18,6 +18,7 @@
   "homepage": "https://github.com/Bhunmas/Backend_Pos#readme",
   "devDependencies": {
     "@types/node": "^22.13.10",
+    "prettier": "3.5.3",
     "typescript": "^5.8.2"
   },
   "dependencies": {
