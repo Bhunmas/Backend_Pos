@@ -87,7 +87,8 @@ export function createProductController( postgresProduct: OrderDbService) {
                 Order_name: _req.body.Order_name,
                 Order_price: _req.body.Order_price,
                 Order_category: _req.body.Order_category,
-                Order_active: true
+                Order_active: true,
+                Order_imageurl: _req.body.Order_imageurl
             }).then((res) => {
                 return { "message": "Success", "statusCode": 200, "result": res }
             })
@@ -104,7 +105,8 @@ export function createProductController( postgresProduct: OrderDbService) {
                 Order_name: _req.body.Order_name,
                 Order_price: _req.body.Order_price,
                 Order_category: _req.body.Order_category,
-                Order_active: true
+                Order_active: true,
+                Order_imageurl: _req.body.Order_imageurl
             }).then((res) => {
                 return { "message": "Success", "statusCode": 200}
             }).catch((res)=>{

@@ -16,7 +16,7 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
     }
 
     });
-    private result: OrderDb = new OrderDb("", "", 0, "", false);
+    private result: OrderDb = new OrderDb("", "", 0, "", false,"");
 
     async connect() {
 

@@ -10,12 +10,12 @@ export class OrderDbService{
         return this.orderRespository.connect();
     }
     addOrder(item:OrderDb){
-        const result = new OrderDb(item.Order_id,item.Order_name,item.Order_price,item.Order_category,item.Order_active);
+        const result = new OrderDb(item.Order_id,item.Order_name,item.Order_price,item.Order_category,item.Order_active,item.Order_imageurl);
         return  this.orderRespository.addOrder(result);
        
     }
     updateOrder(item:OrderDb){
-        const result = new OrderDb(item.Order_id,item.Order_name,item.Order_price,item.Order_category,item.Order_active);
+        const result = new OrderDb(item.Order_id,item.Order_name,item.Order_price,item.Order_category,item.Order_active,item.Order_imageurl);
         return  this.orderRespository.updateOrder(result);
     }
 
