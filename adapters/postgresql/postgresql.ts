@@ -9,11 +9,11 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
         host: process.env.HOST_DATABASE,
         database: process.env.NAME_DATABASE,
         password: String(process.env.PASSWORD_DATABASE),
-        port:process.env.PORT_DATABASE,
-        ssl:false
-        // ssl: {
-        //     rejectUnauthorized: false  // Adjust as needed for SSL setup
-        //   }
+        // port:process.env.PORT_DATABASE,
+       // ssl:false
+       ssl:{
+        rejectUnauthorized:false
+    }
 
     });
     private result: OrderDb = new OrderDb("", "", 0, "", false);

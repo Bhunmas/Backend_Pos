@@ -8,8 +8,11 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
         host: process.env.HOST_DATABASE,
         database: process.env.NAME_DATABASE,
         password: String(process.env.PASSWORD_DATABASE),
-        port:process.env.PORT_DATABASE,
-        ssl:false
+        // port:process.env.PORT_DATABASE,
+        // ssl:false
+        ssl:{
+            rejectUnauthorized:false
+        }
     })
     readAll(): Promise<any> {
         return new Promise(async(resolve,reject)=>{
