@@ -36,6 +36,17 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
 
 
     }
+    readTable(): Promise<OrderDb[]> {
+        return new Promise(async (resolve, reject) => {
+            const connect = await this.client.connect();
+          
+            const res = await this.client.query('SELECT product_id,product_name,price,category,active,created_at,updated_at FROM products where active = true ORDER BY product_id ASC');
+            resolve(res.rows);
+            connect.release();
+        })
+
+
+    }
     readOne(id: number): Promise<OrderDb> {
         return new Promise(async (resolve, reject) => {
             if (Number.isNaN(id)) {
@@ -74,6 +85,7 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
     addOrder(value: OrderDb): Promise<any> {
         return new Promise(async (resolve, reject) => {
             const connect = await this.client.connect();
+            await console.log('postgre ',value)
             const res = await this.client.query(`INSERT INTO products(product_name,price,category,active) values('${value.Order_name}',${value.Order_price},'${value.Order_category}',True)`);
             resolve([]);
             connect.release();
