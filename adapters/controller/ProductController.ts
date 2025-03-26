@@ -89,7 +89,7 @@ export function createProductController( postgresProduct: OrderDbService) {
 
     router.post("/create", async (_req: Request, res: Response) => {
         // wait api 
-        console.log('_req :', _req.body)
+        
         const result = await postgresProduct.addOrder(
             {
                 Order_id: _req.body.product_id,
@@ -107,15 +107,15 @@ export function createProductController( postgresProduct: OrderDbService) {
 
     router.patch("/update", async (_req: Request, res: Response) => {
         // wait api 
-      
+        console.log('_req :', _req.body)
         const result = await postgresProduct.updateOrder(
             {
-                Order_id: _req.body.Order_id,
-                Order_name: _req.body.Order_name,
-                Order_price: _req.body.Order_price,
-                Order_category: _req.body.Order_category,
-                Order_active: true,
-                Order_imageurl: _req.body.Order_imageurl
+                Order_id: _req.body.product_id,
+                Order_name: _req.body.product_name,
+                Order_price: _req.body.price,
+                Order_category: _req.body.category,
+                Order_active:  _req.body.active,
+                Order_imageurl: null
             }).then((res) => {
                 return { "message": "Success", "statusCode": 200}
             }).catch((res)=>{

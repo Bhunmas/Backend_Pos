@@ -16,7 +16,7 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
     }
 
     });
-    private result: OrderDb = new OrderDb("", "", 0, "", false,"");
+    private result: OrderDb = new OrderDb(0, "", 0, "", false,"");
 
     async connect() {
 
@@ -95,9 +95,10 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
         return new Promise(async (resolve, reject) => {
             try{
                 const connect = await this.client.connect();
+                console.log('values :',value);
                 const seachResult =  this.client.query(`Select * from Products where product_id = ${value.Order_id}`);
                 if(seachResult.rows <= 0) throw Error('Data not found');
-                const res = await this.client.query(`Update Products set product_name = '${value.Order_name}',price =${value.Order_price} ,category ='${value.Order_category}' where product_id = ${value.Order_id}`);
+                const res = await this.client.query(`Update Products set product_name = '${value.Order_name}',price =${value.Order_price} ,category ='${value.Order_category}' , active ='${value.Order_active}' where product_id = ${value.Order_id} `);
                 if(res.rowCount <= 0 ) reject(res);
                 resolve(res);
                 connect.release();
