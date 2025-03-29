@@ -27,7 +27,7 @@ export function createProductController( postgresProduct: OrderDbService) {
 
     router.get("/products/table", async (_req: Request, res: Response) => {
         // wait api 
-        const result = await postgresProduct.readOrderss().then((res) => {
+        const result = await postgresProduct.readOrderTable().then((res) => {
             return { "message": "Success", "statusCode": 200, "result": res }
         })
         console.log("results :", result);

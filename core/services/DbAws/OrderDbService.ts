@@ -29,7 +29,7 @@ export class OrderDbService{
     readOrder(){
         return  this.orderRespository.readAll()
     }
-    readOrderss(){
+    readOrderTable(){
         return  this.orderRespository.readTable()
     }
     
