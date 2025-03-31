@@ -38,7 +38,7 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
         return new Promise(async(resolve,reject)=>{
             const connect = await this.client.connect();
             try{
-                
+                if(value.Employee_id == null) reject({errorcode:0,message:'id is null',status:404})
                 console.log("value: ",value)
                 // email cadidate key
                 const res = await this.client.query(`insert into employees(employee_name,employee_lastname,email,phone,region,position,salary,active) values('${value.Employee_name}','${value.Employee_lastname}','${value.email}','${value.phone}','Thailand','${value.position}',${value.salary},true)`);
@@ -58,11 +58,12 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
     updateEmployee(value:Employee):Promise<any>{
         return new Promise(async(resolve,reject)=>{
             const connect = await this.client.connect();
-            console.log('value :',value)
-            const search = await this.client.query(`select * from employees where employee_id = ${value.Employee_id}`);
-            console.log('search :',search)
-            if(search.rowCount<=0) reject({'message':'Data not found','status':404});
-            const res = await this.client.query(`update employees 
+            try{
+                if(value.Employee_id == null) reject({errorcode:0,message:'id is null',status:404})
+                console.log('value :',value)
+                const search = await this.client.query(`select * from employees where employee_id = ${value.Employee_id}`);
+                if(search.rowCount<=0) reject({'message':'Data not found','status':404});
+                const res = await this.client.query(`update employees 
                 set employee_name ='${value.Employee_name}' , 
                 employee_lastname ='${value.Employee_lastname}',
                 email ='${value.email}',
@@ -72,9 +73,15 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
                 salary =${value.salary},
                 active = true
                 where employee_id = ${value.Employee_id}`);
-            if(search.rowCount<=0) reject({'message':'can not  update data','status':404});
-            resolve(res.rows);
-            connect.release(); 
+                resolve(res.rows);
+              
+            }catch(error){
+                if(error.code == 23505) reject({errorcode:23505,message:"email already exists",status:400})
+                reject(error);
+            }finally{
+                connect.release(); 
+            }
+            
 
         })
     }
