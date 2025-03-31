@@ -40,7 +40,7 @@ export function createEmployeeController(postgresEmployee: EmployeeService) {
       active: true,
     };
     const request: Employee = new Employee(
-      null,
+      1,
       _req.body.employee_name,
       _req.body.employee_lastname,
       _req.body.email,
@@ -57,7 +57,8 @@ export function createEmployeeController(postgresEmployee: EmployeeService) {
         return { message: 'Success', statuscode: 200 };
       })
       .catch((err) => {
-        if(err.Employee_id == null) return { message:'id is null',status:404 };
+       
+        if(err.errorcode == 10 ) return { message:`${err.message}`,status:404}
         if(err.errorcode == 23505) return { message: 'Email already exists', statuscode: 400 };
         return { message: 'Data not found', statusCode: 404 };
       });
@@ -81,6 +82,7 @@ export function createEmployeeController(postgresEmployee: EmployeeService) {
     }).catch((err) => {
       console.log('err',err)
       if(err.errorcode == 0 ) return { message:'id is null',status:404 }
+      if(err.errorcode == 10 ) return { message:`${err.message}`,status:404}
       if(err.errorcode == 23505) return { message: 'Email already exists', statuscode: 400 };
       return { message: 'Data not found', statusCode: 404 };
     });

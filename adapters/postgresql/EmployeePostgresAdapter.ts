@@ -35,12 +35,19 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
         })
     }
     create(value:Employee):Promise<any>{
+        
         return new Promise(async(resolve,reject)=>{
             const connect = await this.client.connect();
             try{
-                if(value.Employee_id == null) reject({errorcode:0,message:'id is null',status:404})
-                console.log("value: ",value)
-                // email cadidate key
+                console.log('value :',value)
+                await Object.keys(value).map((res)=>
+                        value[res] == undefined || value[res] == null ? reject({errorcode:10,message:`${res} is null`,status:404}): value
+                )
+                // emailVerify
+                const emailVerify = await this.client.query(`select email from employees where email = '${value.email}'`); 
+                if(emailVerify.rowCount > 0) reject({errorcode:23505,message:"email already exists",status:400})
+                console.log("value: ",Object.keys(value))
+                // insert row
                 const res = await this.client.query(`insert into employees(employee_name,employee_lastname,email,phone,region,position,salary,active) values('${value.Employee_name}','${value.Employee_lastname}','${value.email}','${value.phone}','Thailand','${value.position}',${value.salary},true)`);
                 console.log('res',res)
                 if(res.rowCount<=0) reject(res); 
@@ -60,9 +67,17 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
             const connect = await this.client.connect();
             try{
                 if(value.Employee_id == null) reject({errorcode:0,message:'id is null',status:404})
-                console.log('value :',value)
+                await Object.keys(value).map((res)=>
+                    value[res] == undefined || value[res] == null ? reject({errorcode:10,message:`${res} is null`,status:404}): value
+                )
+                // emailVerify 
+                const emailVerify = await this.client.query(`select * from employees where email = '${value.email}'`);
+                console.log('email ',emailVerify)
+                if(emailVerify.rowCount > 0 ) reject({errorcode:23505,message:"email already exists",status:400})
+                // verify row have exist.
                 const search = await this.client.query(`select * from employees where employee_id = ${value.Employee_id}`);
                 if(search.rowCount<=0) reject({'message':'Data not found','status':404});
+                // update row
                 const res = await this.client.query(`update employees 
                 set employee_name ='${value.Employee_name}' , 
                 employee_lastname ='${value.Employee_lastname}',
