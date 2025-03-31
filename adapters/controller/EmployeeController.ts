@@ -41,8 +41,8 @@ export function createEmployeeController(postgresEmployee: EmployeeService) {
     };
     const request: Employee = new Employee(
       null,
-      _req.body.Employee_name,
-      _req.body.Employee_lastname,
+      _req.body.employee_name,
+      _req.body.employee_lastname,
       _req.body.email,
       _req.body.phone,
       _req.body.region,
@@ -65,9 +65,9 @@ export function createEmployeeController(postgresEmployee: EmployeeService) {
   // update employee
   router.patch(`/update`, async(_req: Request, res: Response) => {
     const request: Employee = new Employee(
-      _req.body.Employee_id,
-      _req.body.Employee_name,
-      _req.body.Employee_lastname,
+      _req.body.employee_id,
+      _req.body.employee_name,
+      _req.body.employee_lastname,
       _req.body.email,
       _req.body.phone,
       _req.body.region,
