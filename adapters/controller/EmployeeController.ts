@@ -57,6 +57,7 @@ export function createEmployeeController(postgresEmployee: EmployeeService) {
         return { message: 'Success', statuscode: 200 };
       })
       .catch((err) => {
+        if(err.errorcode == 23505) return { message: 'Email already exists', statuscode: 400 };
         return { message: 'Data not found', statusCode: 404 };
       });
     res.status(200).send(result);

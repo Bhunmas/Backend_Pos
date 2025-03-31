@@ -35,24 +35,44 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
         })
     }
     create(value:Employee):Promise<any>{
-        return new Promise((resolve,reject)=>{
-            const connect = this.client.connect();
-            console.log("value: ",value)
-            // email cadidate key
-            const res = this.client.query(`insert into employees(employee_name,employee_lastname,email,phone,region,position,salary,active) values('${value.Employee_name}','${value.Employee_lastname}','${value.email}','${value.phone}','Thailand','${value.position}',${value.salary},true)`);
-            if(res.rowCount<=0) reject(res); 
-            resolve(res);   
-            connect.release();
+        return new Promise(async(resolve,reject)=>{
+            const connect = await this.client.connect();
+            try{
+                
+                console.log("value: ",value)
+                // email cadidate key
+                const res = await this.client.query(`insert into employees(employee_name,employee_lastname,email,phone,region,position,salary,active) values('${value.Employee_name}','${value.Employee_lastname}','${value.email}','${value.phone}','Thailand','${value.position}',${value.salary},true)`);
+                console.log('res',res)
+                if(res.rowCount<=0) reject(res); 
+                resolve(res);   
+            }catch(error){
+                if(error.code == 23505) reject({errorcode:23505,message:"email already exists",status:400})
+                reject(error);
+            }finally{
+                connect.release();
+            }
+           
         })
     }
 
     updateEmployee(value:Employee):Promise<any>{
         return new Promise(async(resolve,reject)=>{
             const connect = await this.client.connect();
+            console.log('value :',value.Employee_id)
             const search = await this.client.query(`select * from employees where employee_id = ${value.Employee_id}`);
+            console.log('search :',search)
             if(search.rowCount<=0) reject({'message':'Data not found','status':404});
-            const res = await this.client.query(`update employees set employee_name ='${value.Employee_name}' where employee_id = ${value.Employee_id}`);
-            if(search.rowCount<=0) reject({'message':'Data not update','status':404});
+            const res = await this.client.query(`update employees 
+                set employee_name ='${value.Employee_name}' , 
+                employee_lastname ='${value.Employee_lastname}',
+                email ='${value.email}',
+                phone ='${value.phone}',
+                region ='Thailand',
+                position ='${value.position}',
+                salary =${value.salary},
+                active = true
+                where employee_id = ${value.Employee_id}`);
+            if(search.rowCount<=0) reject({'message':'can not  update data','status':404});
             resolve(res.rows);
             connect.release(); 
 
