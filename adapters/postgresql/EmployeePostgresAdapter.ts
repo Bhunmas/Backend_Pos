@@ -58,7 +58,7 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
     updateEmployee(value:Employee):Promise<any>{
         return new Promise(async(resolve,reject)=>{
             const connect = await this.client.connect();
-            console.log('value :',value.Employee_id)
+            console.log('value :',value)
             const search = await this.client.query(`select * from employees where employee_id = ${value.Employee_id}`);
             console.log('search :',search)
             if(search.rowCount<=0) reject({'message':'Data not found','status':404});

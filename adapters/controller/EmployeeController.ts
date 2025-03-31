@@ -43,10 +43,10 @@ export function createEmployeeController(postgresEmployee: EmployeeService) {
       null,
       _req.body.Employee_name,
       _req.body.Employee_lastname,
-      _req.body.Employee_email,
-      _req.body.Employee_phone,
-      _req.body.Employee_region,
-      _req.body.Employee_position,
+      _req.body.email,
+      _req.body.phone,
+      _req.body.region,
+      _req.body.position,
       _req.body.salary,
       true
     );
@@ -65,16 +65,16 @@ export function createEmployeeController(postgresEmployee: EmployeeService) {
   // update employee
   router.patch(`/update`, async(_req: Request, res: Response) => {
     const request: Employee = new Employee(
-        _req.body.Employee_id,
-        _req.body.Employee_name,
-        _req.body.Employee_lastname,
-        _req.body.Employee_email,
-        _req.body.Employee_phone,
-        _req.body.Employee_region,
-        _req.body.Employee_position,
-        _req.body.salary,
-        true
-      );
+      _req.body.Employee_id,
+      _req.body.Employee_name,
+      _req.body.Employee_lastname,
+      _req.body.email,
+      _req.body.phone,
+      _req.body.region,
+      _req.body.position,
+      _req.body.salary,
+      true
+    );
     const result = await postgresEmployee.update(request).then((res) => {
       return { message: 'Success', statuscode: 200 };
     }).catch((err) => {
