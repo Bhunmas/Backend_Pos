@@ -35,4 +35,14 @@ export class InPostgresqlMaterialRepository implements IMaterialRepository{
         return new Promise(async (resolve, reject) => {
         })
     }
+    readCategory(value: any){
+        return new Promise(async (resolve, reject) => {
+            const connect = await  this.client.connect();
+            console.log('value :',value);
+            const res = await this.client.query(`select * from materials where category = '${value}'`);
+            if(res.rowCount <= 0) reject(res)  
+            resolve(res.rows);
+            connect.release();
+        })
+    }
 }

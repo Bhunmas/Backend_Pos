@@ -14,6 +14,36 @@ export function  createMaterialController(postgresMaterial:MaterialService){
     router.get("/materials/table", (_req: Request, res: Response) => {
     });
 
+    router.get("/category/:category",async (_req: Request, res: Response) => {
+        try{
+            switch(_req.params.category){
+                case "Tea":
+                    _req.params.category = "ชา";
+                    break;
+                case "General":
+                    _req.params.category = "ทั่วไป";
+                    break;
+                case "Sauce":
+                    _req.params.category = "ซอส";
+                    break;
+                default:
+                    throw Error("Data not found")
+                    break;
+                
+            }
+
+            const result = await postgresMaterial.readCategory(_req.params.category).then((res) => {
+                return { "message": "Success", "statusCode": 200, "result": res }
+            })
+            res.status(200).send(result);
+            
+        }
+        catch(error){
+
+        }
+    });
+
+
 
     return router;
 

@@ -14,6 +14,10 @@ export class MaterialService{
     update(value:any){
         return this.materialRespository.update(value);
     }
+    readCategory(value:any){
+        return this.materialRespository.readCategory(value);
+    }
+
     
     
 }
