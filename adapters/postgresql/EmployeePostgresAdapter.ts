@@ -64,8 +64,11 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
 
     updateEmployee(value:Employee):Promise<any>{
         return new Promise(async(resolve,reject)=>{
+            console.log('value ',value);
             const connect = await this.client.connect();
             try{
+                // becareful when user region is null set Default;
+                if(value.region == null)  value.region = 'Thailand';
                 if(value.Employee_id == null) reject({errorcode:0,message:'id is null',status:404})
                 await Object.keys(value).map((res)=>
                     value[res] == undefined || value[res] == null ? reject({errorcode:10,message:`${res} is null`,status:404}): value
@@ -73,7 +76,7 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
                 // emailVerify 
                 const emailVerify = await this.client.query(`select * from employees where email = '${value.email}'`);
                 console.log('email ',emailVerify)
-                if(emailVerify.rowCount > 0 ) reject({errorcode:23505,message:"email already exists",status:400})
+                if(emailVerify.rowCount > 1 ) reject({errorcode:23505,message:"email already exists",status:400})
                 // verify row have exist.
                 const search = await this.client.query(`select * from employees where employee_id = ${value.Employee_id}`);
                 if(search.rowCount<=0) reject({'message':'Data not found','status':404});
@@ -86,7 +89,7 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
                 region ='Thailand',
                 position ='${value.position}',
                 salary =${value.salary},
-                active = true
+                active = '${value.active}'
                 where employee_id = ${value.Employee_id}`);
                 resolve(res.rows);
               

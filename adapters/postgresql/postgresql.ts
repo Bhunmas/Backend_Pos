@@ -91,12 +91,13 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
             connect.release();
         })
     }
-    updateOrder(value: OrderDb): Promise<any> {
+    
+    updateOrder(value: any): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try{
                 const connect = await this.client.connect();
                 console.log('values :',value);
-                const seachResult =  this.client.query(`Select * from Products where product_id = ${value.Order_id}`);
+                const seachResult = await  this.client.query(`Select * from Products where product_id = ${value.Order_id}`);
                 if(seachResult.rows <= 0) throw Error('Data not found');
                 const res = await this.client.query(`Update Products set product_name = '${value.Order_name}',price =${value.Order_price} ,category ='${value.Order_category}' , active ='${value.Order_active}' where product_id = ${value.Order_id} `);
                 if(res.rowCount <= 0 ) reject(res);

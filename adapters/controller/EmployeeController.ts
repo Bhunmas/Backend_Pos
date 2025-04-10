@@ -75,7 +75,7 @@ export function createEmployeeController(postgresEmployee: EmployeeService) {
       _req.body.region,
       _req.body.position,
       _req.body.salary,
-      true
+      _req.body.active
     );
     const result = await postgresEmployee.update(request).then((res) => {
       return { message: 'Success', statuscode: 200 };

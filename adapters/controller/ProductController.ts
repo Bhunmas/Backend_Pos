@@ -1,6 +1,7 @@
 import { Router, Request, Response } from "express";
 import { OrderDbService } from "../../core/services/DbAws/OrderDbService";
 import { stat } from "fs";
+import { OrderDb } from "../../core/entites/DbAws/OrderDb";
 
 
 export function createProductController( postgresProduct: OrderDbService) {
@@ -107,6 +108,7 @@ export function createProductController( postgresProduct: OrderDbService) {
 
     router.patch("/update", async (_req: Request, res: Response) => {
         // wait api 
+        const req:OrderDb = new OrderDb(_req.body.Order_id, _req.body.Order_name, _req.body.Order_price,_req.body.Order_category, _req.body.Order_active, null   ); 
         console.log('_req :', _req.body)
         const result = await postgresProduct.updateOrder(
             {
@@ -114,7 +116,7 @@ export function createProductController( postgresProduct: OrderDbService) {
                 Order_name: _req.body.product_name,
                 Order_price: _req.body.price,
                 Order_category: _req.body.category,
-                Order_active:  _req.body.active,
+                Order_active: _req.body.active,
                 Order_imageurl: null
             }).then((res) => {
                 return { "message": "Success", "statusCode": 200}
