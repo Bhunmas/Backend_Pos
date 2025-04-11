@@ -1,6 +1,8 @@
 import { Router, Request, Response } from 'express';
 import { EmployeeService } from '../../core/services/DbAws/EmployeeService';
 import { Employee } from '../../core/entites/DbAws/Employee';
+import { LoginEmployee } from '../../core/entites/DbAws/LoginEmployee';
+
 export function createEmployeeController(postgresEmployee: EmployeeService) {
   const router = Router();
   router.get('/employees', async (_req: Request, res: Response) => {
@@ -48,6 +50,7 @@ export function createEmployeeController(postgresEmployee: EmployeeService) {
       _req.body.region,
       _req.body.position,
       _req.body.salary,
+      null,
       true
     );
 
@@ -55,6 +58,30 @@ export function createEmployeeController(postgresEmployee: EmployeeService) {
       .create(request)
       .then(() => {
         return { message: 'Success', statuscode: 200 };
+      })
+      .catch((err) => {
+       
+        if(err.errorcode == 10 ) return { message:`${err.message}`,status:404}
+        if(err.errorcode == 23505) return { message: 'Email already exists', statuscode: 400 };
+        return { message: 'Data not found', statusCode: 404 };
+      });
+    res.status(200).send(result);
+  });
+
+  // login employeee
+  router.post(`/login`, async (_req: Request, res: Response) => {
+   console.log('_req',_req.body);
+    const request: LoginEmployee = new LoginEmployee(
+      _req.body.email,
+      _req.body.password,
+ 
+    );
+   
+
+    const result = await postgresEmployee
+      .login(request)
+      .then((res) => {
+        return { message: 'Success', statuscode: 200 ,result:res};
       })
       .catch((err) => {
        
@@ -75,6 +102,7 @@ export function createEmployeeController(postgresEmployee: EmployeeService) {
       _req.body.region,
       _req.body.position,
       _req.body.salary,
+      null,
       _req.body.active
     );
     const result = await postgresEmployee.update(request).then((res) => {
