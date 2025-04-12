@@ -115,7 +115,7 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
                 if(search.rows < 0) reject ({errorcode:10,message:"email or password is incorrect",status:400})
                 await this.client.query(`insert into tokens(user_id,token,expires_at) values('${search.rows[0].employee_id}','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9','2025-04-12 10:00:00')`);
               
-                resolve({id:search.rows[0].employee_id,user:search.rows[0].employee_name,token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9'});
+                resolve({id:search.rows[0].employee_id,user:search.rows[0].employee_name,token:'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9',permission:search.rows[0].position});
             }catch(error){
                 reject(error);
             }finally{
