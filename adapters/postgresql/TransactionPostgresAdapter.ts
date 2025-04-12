@@ -38,4 +38,8 @@ export class InPostgresqlTransactionRepository implements ITransactionRepository
             connect.release();
         })
     }
+
+    readTable(value:any):Promise<any>{
+
+    }
 }
