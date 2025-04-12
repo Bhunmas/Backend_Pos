@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
 import { TransactionService } from '../../core/services/DbAws/TransactionService';
-
+const crypto = require('crypto');
 export function createTransactionController(
   postgresTransactionService: TransactionService
 ) {
@@ -50,6 +50,12 @@ export function createTransactionController(
       });
     res.status(200).send(result);
   });
+  router.get('/transactions/test', async (_req: Request, res: Response) => {
+    const  text = {menu:'chathai',price:'10',quantity:10,total:100}
+    const translate = JSON.stringify(text)
+    res.status(200).send({message : translate,json:text,reverse:JSON.parse(translate)});
+  });
+  
   
 
   return router;
