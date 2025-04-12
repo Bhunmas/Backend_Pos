@@ -11,7 +11,7 @@ export class TransactionService{
     create(value:Transaction){
         return this.transactionRespository.create(value);
     }
-    readTable(value:any){
-        return this.transactionRespository.readTable(value);
+    readTable(){
+        return this.transactionRespository.readTable();
     }
 }

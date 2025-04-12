@@ -39,7 +39,13 @@ export class InPostgresqlTransactionRepository implements ITransactionRepository
         })
     }
 
-    readTable(value:any):Promise<any>{
-        return new Promise(()=>{})
+    readTable():Promise<any>{
+        return new Promise(async(resolve,reject)=>{
+            const connect = await this.client.connect();
+            const res = await this.client.query(`select * from transactions`);
+            resolve(res.rows);
+            connect.release();
+         
+        })
     }
 }

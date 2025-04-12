@@ -39,5 +39,18 @@ export function createTransactionController(
     res.status(200).send(result);
   });
 
+  router.get('/transactions/table', async (_req: Request, res: Response) => {
+    const result = await postgresTransactionService
+      .readTable()
+      .then((res) => {
+        return { message: 'success', status: '200', result: res };
+      })
+      .catch(() => {
+        return { message: 'error', status: '500' };
+      });
+    res.status(200).send(result);
+  });
+  
+
   return router;
 }
