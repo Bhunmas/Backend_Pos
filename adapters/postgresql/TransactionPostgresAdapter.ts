@@ -40,6 +40,6 @@ export class InPostgresqlTransactionRepository implements ITransactionRepository
     }
 
     readTable(value:any):Promise<any>{
-
+        return new Promise(()=>{})
     }
 }
