@@ -43,6 +43,15 @@ export function  createMaterialController(postgresMaterial:MaterialService){
         }
     });
 
+    router.patch("/update", async(_req: Request, res: Response) => {
+        const result = await postgresMaterial.update(_req.body).then((res)=>{
+            return { "message": "Success", "statusCode": 200 }
+        });
+        res.status(200).send(result);
+    });
+
+
+
 
 
     return router;
