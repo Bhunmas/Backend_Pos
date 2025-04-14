@@ -43,6 +43,7 @@ export class InPostgresqlTransactionRepository implements ITransactionRepository
         return new Promise(async(resolve,reject)=>{
             const connect = await this.client.connect();
             const res = await this.client.query(`select * from transactions`);
+            
             resolve(res.rows);
             connect.release();
          
@@ -51,7 +52,8 @@ export class InPostgresqlTransactionRepository implements ITransactionRepository
     readDetailTable(): Promise<any> {
         return new Promise(async (resolve, reject) => {
             const connect = await this.client.connect();
-            const res = await this.client.query(`select t.transaction_id,t.product_detail from transactions t where t.transaction_id <= 2 order by t.transaction_id ASC  `);
+            const res = await this.client.query(`select t.transaction_id,t.product_detail,t.total_price,t.employee_name,t.quantity,t.transaction_date from transactions t where t.transaction_id <= 2 order by t.transaction_id ASC  `);
+           
             resolve(res.rows);
             connect.release();
         });

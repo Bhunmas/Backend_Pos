@@ -25,7 +25,10 @@ export class TransactionService{
             res.forEach(async(element:any) => {
                 const b:any = await zlib.inflateSync(element.product_detail)
                 element.product_detail = JSON.parse(b);
-               
+                // element.product_detail.forEach((element)=>{
+                //     element.toppings = JSON.stringify(element.toppings)
+                // })
+             
             })
             
             

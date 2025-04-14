@@ -128,7 +128,7 @@ export function createTransactionController(
     // let decryption = cipherDecryp.update(encryption,'base64','utf-8');
     // decryption += cipherDecryp.final('utf-8');
   
-    res.status(200).send({message : result});
+    res.status(200).send(result);
   });
   
   
