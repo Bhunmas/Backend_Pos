@@ -15,14 +15,23 @@ export class TransactionService{
     readTable(){
         return this.transactionRespository.readTable();
     }
-    async readDetailTable(){
+     readDetailTable(){
         const zlib = new createZlibService();
 
-       const  res = await this.transactionRespository.readDetailTable()
+        const  res =  this.transactionRespository.readDetailTable()
              
-          
-       const a = await zlib.inflateSync(res[0].product_detail)
-        console.log('res',a)
+        res.then( (res)=>{
+            // const a =  await zlib.deflateSync("ชาวกินกาแฟแก้วใหญ่")
+            res.forEach(async(element:any) => {
+                const b:any = await zlib.inflateSync(element.product_detail)
+                element.product_detail = JSON.parse(b);
+               
+            })
+            
+            
+        })
+        console.log('res : ',res)
+      
      
         return res;
         
