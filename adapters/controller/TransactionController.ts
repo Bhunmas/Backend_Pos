@@ -26,11 +26,9 @@ export function createTransactionController(
         Transaction_id: Number(_req.body.Transaction_id),
         Employee_id: _req.body.Employee_id,
         Employee_name: _req.body.Employee_name,
-        Product_id: Number(_req.body.Product_id),
-        Product_name: _req.body.Product_name,
+        Product_detail: _req.body.Product_detail,
         Quantity: _req.body.Quantity,
         Total_price: Number(_req.body.Total_price),
-       
       })
       .then((res) => {
         return { message: 'success', status: '200', result: res };

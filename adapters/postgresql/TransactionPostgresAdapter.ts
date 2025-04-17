@@ -28,7 +28,8 @@ export class InPostgresqlTransactionRepository implements ITransactionRepository
     create(value:Transaction): Promise<any> {
         return new Promise(async(resolve,reject)=>{
             const connect = await this.client.connect();
-            const insertTransactionCommand = `insert into transactions(product_id,employee_id,quantity,total_price,employee_name) values(${value.Product_id},${value.Employee_id},${value.Quantity},${value.Total_price},(select e.employee_name from employees e where e.employee_id = ${value.Employee_id}))`
+            console.log('Transaction :',value)
+            const insertTransactionCommand = `insert into transactions(employee_id,quantity,total_price,employee_name,product_detail) values(${value.Employee_id},${value.Quantity},${value.Total_price},(select e.employee_name from employees e where e.employee_id = ${value.Employee_id}),'${value.Product_detail}')`
             //insert into transactions(product_id,employee_id,product_name,quantity,total_price,employee_name) select ${value.Product_id},${value.Employee_id},p.product_name,${value.Quantity},${value.Total_price},e.employee_name from Transactions t join products p on ${value.Product_id} = p.product_id
 //join employees e on ${value.Employee_id} = e.employee_id
             // insert into transactions(product_id,employee_id,employee_name,product_name) select t.product_id,t.employee_id,p.product_name from Transactions t join products p  on t.product_id = p.product_id
@@ -52,7 +53,7 @@ export class InPostgresqlTransactionRepository implements ITransactionRepository
     readDetailTable(): Promise<any> {
         return new Promise(async (resolve, reject) => {
             const connect = await this.client.connect();
-            const res = await this.client.query(`select t.transaction_id,t.product_detail,t.total_price,t.employee_name,t.quantity,t.transaction_date from transactions t where t.transaction_id <= 2 order by t.transaction_id ASC  `);
+            const res = await this.client.query(`select t.transaction_id,t.product_detail,t.total_price,t.employee_name,t.quantity,t.transaction_date from transactions t  order by t.transaction_id ASC  `);
            
             resolve(res.rows);
             connect.release();
