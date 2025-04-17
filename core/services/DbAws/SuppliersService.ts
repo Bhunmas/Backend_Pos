@@ -5,8 +5,8 @@ export class SuppliersService{
 
     }
 
-    create(){
-        return this.suppliersRespository.create("");
+    create(value:any){
+        return this.suppliersRespository.create(value);
     }
     read(){
         return this.suppliersRespository.read();
@@ -16,6 +16,9 @@ export class SuppliersService{
     }
     update(value:any){
         return this.suppliersRespository.update(value);
+    }
+    readById(id:number){
+        return this.suppliersRespository.readById(id);
     }
 
     
