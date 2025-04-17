@@ -18,6 +18,10 @@ export class MaterialService{
         return this.materialRespository.readCategory(value);
     }
 
+    readById(value:number){
+        return this.materialRespository.readOne(value);
+    }
+
     
 
     

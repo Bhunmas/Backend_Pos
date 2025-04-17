@@ -34,6 +34,11 @@ export class InPostgresqlMaterialRepository implements IMaterialRepository{
     }
     readOne(valuebyid: number): Promise<any> {
         return new Promise(async (resolve, reject) => {
+            const connect = await this.client.connect();
+            const res = await this.client.query(`select * from materials where mat_id = ${valuebyid} order by mat_id  asc`);
+            if(res.rowCount <= 0) reject(res)
+            resolve(res.rows);
+            connect.release();
         })
     }
     update(value: any): Promise<any> {

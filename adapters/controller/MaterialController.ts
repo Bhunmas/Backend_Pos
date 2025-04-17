@@ -14,6 +14,16 @@ export function  createMaterialController(postgresMaterial:MaterialService){
     router.get("/materials/table", (_req: Request, res: Response) => {
     });
 
+    router.get("/materials/:id",async (_req: Request, res: Response) => {
+
+        const result = await postgresMaterial.readById(Number(_req.params.id)).then((res) => {
+            return { "message": "Success", "statusCode": 200, "result": res }
+        });
+        res.status(200).send(result);
+    });
+
+
+
     router.get("/category/:category",async (_req: Request, res: Response) => {
         try{
             switch(_req.params.category){
@@ -43,6 +53,7 @@ export function  createMaterialController(postgresMaterial:MaterialService){
         }
     });
     router.post("/create", async (_req: Request, res: Response) => {
+        console.log("create",_req.body)
         const result = await postgresMaterial.create(_req.body).then((res)=>{
             return { "message": "Success", "statusCode": 200 }
         });
