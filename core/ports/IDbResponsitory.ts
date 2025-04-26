@@ -12,7 +12,7 @@ export interface IOrderDbResponsitory{
     inactiveOrder(valuebyid:number):Promise<any>;
 
     updateOrder(value:OrderDb):Promise<any>;
-    deleteOrder(id:number):void;
+    deleteOrder(id:number):Promise<any>;
 
 
 }

@@ -50,5 +50,10 @@ export class OrderDbService{
         return this.orderRespository.inactiveOrder(valuebyid);
     }
 
+    delete(id:number):Promise<any>{
+        return this.orderRespository.deleteOrder(id);
+    
+    }
+
 
 }

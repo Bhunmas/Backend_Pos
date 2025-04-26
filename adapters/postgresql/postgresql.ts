@@ -134,8 +134,21 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
             connect.release();
         })
     }
-    deleteOrder(id: number): void {
-
+    deleteOrder(id: number): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try{
+                if(id == null ) reject([]);
+                const connect = await this.client.connect();
+                const res = await this.client.query(`delete from products where product_id = ${id}`);
+                if(res.rowCount <= 0) reject(res);
+                resolve([]);
+                connect.release();
+            }catch(err){
+                reject(err);
+            }
+         
+        
+        })
     }
     addOrders(value: OrderDb[]): void {
 

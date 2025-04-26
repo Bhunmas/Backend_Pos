@@ -162,6 +162,14 @@ export function createProductController( postgresProduct: OrderDbService) {
     });
 
 
+    router.delete(`/delete/:id`,async(_req:Request,res:Response)=>{
+        const result = await postgresProduct.delete(_req.params.id).then((res)=>{
+            return { "message": "Success", "statusCode": 200 };
+        })
+        res.status(200).send(result);
+    })
+
+
 
 
 

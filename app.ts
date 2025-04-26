@@ -37,8 +37,7 @@ const configCors = {
 app.use(cors(configCors));
 app.use(express.json());
 // ✅ สร้าง Repository และ Service
-const productRepository = new InMemoryProductRepository();
-const productService = new ProductService(productRepository);
+
 const customerRepository = new InMemoryCustomerRepository();
 const customerService = new CustomerService(customerRepository);
 

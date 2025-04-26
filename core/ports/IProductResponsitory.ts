@@ -5,4 +5,5 @@ export interface IProductRepository {
   add(product: Product): void;
   getOrderById(id:number):Product;
   getAll(): Product[];
+  delete(id:number):Promise<any>;
 }
