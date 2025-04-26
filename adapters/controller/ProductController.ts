@@ -22,7 +22,7 @@ export function createProductController( postgresProduct: OrderDbService) {
         const result = await postgresProduct.readOrder().then((res) => {
             return { "message": "Success", "statusCode": 200, "result": res }
         })
-        console.log("results :", result);
+  
         res.status(200).send(result);
     });
 
@@ -31,7 +31,7 @@ export function createProductController( postgresProduct: OrderDbService) {
         const result = await postgresProduct.readOrderTable().then((res) => {
             return { "message": "Success", "statusCode": 200, "result": res }
         })
-        console.log("results :", result);
+        
         res.status(200).send(result);
     });
 
@@ -98,7 +98,7 @@ export function createProductController( postgresProduct: OrderDbService) {
                 Order_price: _req.body.price,
                 Order_category: _req.body.category,
                 Order_active: true,
-                Order_imageurl: null
+                Order_imageurl:_req.body.image
             }).then((res) => {
                 return { "message": "Success", "statusCode": 200, "result": res }
             })
@@ -117,10 +117,12 @@ export function createProductController( postgresProduct: OrderDbService) {
                 Order_price: _req.body.price,
                 Order_category: _req.body.category,
                 Order_active: _req.body.active,
-                Order_imageurl: null
+                Order_imageurl: _req.body.image
             }).then((res) => {
                 return { "message": "Success", "statusCode": 200}
             }).catch((res)=>{
+                console.log('res',res);
+                if(res.errorcode == 10001) return { "message": res.result+" is null", "statusCode": 404 }
                 if(res.rowCount <= 0) return { "message": "Data not found", "statusCode": 404 }
                 return { "message": "Data not found", "statusCode": 404 }
             })

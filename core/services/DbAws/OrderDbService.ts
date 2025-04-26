@@ -16,6 +16,11 @@ export class OrderDbService{
        
     }
     updateOrder(item:OrderDb){
+        if(item.Order_imageurl == undefined){
+            return new Promise((resolve,reject)=>{
+                reject({errorcode:10001,result:"image"})
+            })
+        }
         const result = new OrderDb(item.Order_id,item.Order_name,item.Order_price,item.Order_category,item.Order_active,item.Order_imageurl);
         return  this.orderRespository.updateOrder(result);
     }
