@@ -61,4 +61,24 @@ export class InPostgresqlMaterialRepository implements IMaterialRepository{
             connect.release();
         })
     }
+
+    delete(value: any): Promise<any> {
+        return new Promise(async (resolve, reject) => {
+            try{
+                const connect = await  this.client.connect();
+                console.log('value :',value);
+                const res = await this.client.query(`delete     from materials where mat_id = ${value}`);
+                // if(res.rowCount <= 0) reject(res)  
+                console.log('res',res);
+                resolve(res.rows);
+                connect.release();
+            }catch(error){
+                reject(error);
+            }
+           
+         
+           
+        })
+
+    }
 }

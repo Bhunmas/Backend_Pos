@@ -59,12 +59,21 @@ export function  createMaterialController(postgresMaterial:MaterialService){
         });
         res.status(200).send(result);
     });
-    router.patch("/update", async(_req: Request, res: Response) => {
+    router.delete("/update", async(_req: Request, res: Response) => {
         const result = await postgresMaterial.update(_req.body).then((res)=>{
             return { "message": "Success", "statusCode": 200 }
         });
         res.status(200).send(result);
     });
+
+    router.delete(`/delete/:id`, async(_req: Request, res: Response) => {
+        const result = await postgresMaterial.delete(_req.params.id).then((res)=>{
+            return { "message": "Success", "statusCode": 200 }
+        });
+        res.status(200).send(result);
+    });
+
+    
 
 
 

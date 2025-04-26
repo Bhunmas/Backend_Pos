@@ -22,6 +22,11 @@ export class MaterialService{
         return this.materialRespository.readOne(value);
     }
 
+    delete(value:number){
+        return this.materialRespository.delete(value);
+    
+    }
+
     
 
     

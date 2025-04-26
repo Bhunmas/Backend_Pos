@@ -4,6 +4,6 @@ export interface IMaterialRepository{
     create(value:any):Promise<any>;
     update(value:any):Promise<any>;
     readCategory(value:any):Promise<any>;
-    
+    delete(value:any):Promise<any>;
 
 }
