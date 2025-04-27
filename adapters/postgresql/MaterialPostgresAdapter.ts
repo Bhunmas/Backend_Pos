@@ -16,7 +16,7 @@ export class InPostgresqlMaterialRepository implements IMaterialRepository{
     create(value: any): Promise<any> {
         return new Promise(async (resolve, reject) => {
             const connect = await this.client.connect();
-            const res = await this.client.query(`insert into materials(mat_name,descriptions,category,price,active) values('${value.mat_name}','${value.descriptions}','${value.category}',${value.price},${value.active})`);
+            const res = await this.client.query(`insert into materials(mat_name,descriptions,category,price,amount,img_url,active) values('${value.mat_name}','${value.descriptions}','${value.category}',${value.price},'${value.amount}','${value.image}',${value.active})`);
             if(res.rowCount <= 0) reject(res)  
             resolve(res.rows);
             connect.release();

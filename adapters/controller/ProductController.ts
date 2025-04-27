@@ -90,7 +90,7 @@ export function createProductController( postgresProduct: OrderDbService) {
 
     router.post("/create", async (_req: Request, res: Response) => {
         // wait api 
-        
+        console.log('_req',_req.body)
         const result = await postgresProduct.addOrder(
             {
                 Order_id: _req.body.product_id,
