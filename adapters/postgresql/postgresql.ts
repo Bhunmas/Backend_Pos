@@ -30,7 +30,7 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
         return new Promise(async (resolve, reject) => {
             const connect = await this.client.connect();
             const res = await this.client.query('SELECT * FROM products where active = true ORDER BY product_id ASC');
-            console.log('ress',res)
+           
             
             resolve(res.rows);
             connect.release();
@@ -88,7 +88,7 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
         return new Promise(async (resolve, reject) => {
             const connect = await this.client.connect();
             await console.log('postgre ',value)
-            const res = await this.client.query(`INSERT INTO products(product_name,price,category,active) values('${value.Order_name}',${value.Order_price},'${value.Order_category}',True)`);
+            const res = await this.client.query(`INSERT INTO products(product_name,price,category,image_url,active) values('${value.Order_name}',${value.Order_price},'${value.Order_category}','${value.Order_imageurl}',True)`);
             resolve([]);
             connect.release();
         })
