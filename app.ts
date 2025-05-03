@@ -5,6 +5,7 @@ import { createTransactionController } from "./adapters/controller/TransactionCo
 import {  createMaterialController} from "./adapters/controller/MaterialController";
 import {  createSupplyController } from "./adapters/controller/SupplyController";
 import { createVendor_materialController  } from "./adapters/controller/Vendor_MaterialController";
+import { createSupplierOrderHistoryController  } from "./adapters/controller/SupplyOrderHistoryController";
 
 
 import { ProductService } from "./core/services/ProductService";
@@ -15,6 +16,8 @@ import { TransactionService } from "./core/services/DbAws/TransactionService";
 import { MaterialService } from "./core/services/DbAws/MaterialService";
 import { SuppliersService } from "./core/services/DbAws/SuppliersService";
 import { Vendor_MaterialService } from "./core/services/DbAws/Vendor_MaterialService";
+import { SupplierOrderHistoryService } from "./core/services/DbAws/SupplierOrderHistory";
+
 
 
 import { InMemoryProductRepository } from "./adapters/respositories/InMemoryProductRepository"; 
@@ -25,6 +28,7 @@ import  { InPostgresqlTransactionRepository } from "./adapters/postgresql/Transa
 import  {  InPostgresqlMaterialRepository } from "./adapters/postgresql/MaterialPostgresAdapter"; 
 import  {  InPostgresqlSuppliersRepository } from "./adapters/postgresql/SupplyPostgresAdapter"; 
 import  {  InPostgresqlVendor_MaterialRepository } from "./adapters/postgresql/Vendor_MaterialPostgresAdapter"; 
+import  {  InPostgresqlSupplierHistoryRepository } from "./adapters/postgresql/SupplierOrderHistoryPostgresAdapter"; 
 
 
 import express from "express";
@@ -68,6 +72,8 @@ const materialPostgresqlService = new MaterialService(materialPostgresqlResposit
 const suppliersPostgresqlRespository = new InPostgresqlSuppliersRepository();
 const suppliersPostgresqlService = new SuppliersService(suppliersPostgresqlRespository);
 
+const supplierOrderHistoryPostgresqlRespository = new InPostgresqlSupplierHistoryRepository();
+const supplierOrderHistoryPostgresqlService = new SupplierOrderHistoryService(supplierOrderHistoryPostgresqlRespository)
 
 // ✅ สร้าง Controller
 
@@ -80,6 +86,8 @@ app.use('/transactions', createTransactionController(transactionPostgresqlServic
 app.use('/materials',createMaterialController(materialPostgresqlService));
 app.use('/suppliers',createSupplyController(suppliersPostgresqlService));
 app.use('/vendor_material',createVendor_materialController(vendor_materialService));
+app.use('/supplierorderhistory',createSupplierOrderHistoryController(supplierOrderHistoryPostgresqlService));
+
 
 
 
