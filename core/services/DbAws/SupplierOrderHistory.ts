@@ -10,6 +10,12 @@ export class SupplierOrderHistoryService{
     readAll(){
         return this.supplierOrderHistoryRespository.readAll();
     }
+
+    readPagination(number:any){
+        
+        return this.supplierOrderHistoryRespository.readPagination(number);
+    }
+    
     update(value:any){
         return this.supplierOrderHistoryRespository.update(value);
     
