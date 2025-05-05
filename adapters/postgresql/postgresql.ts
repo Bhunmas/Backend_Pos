@@ -154,4 +154,15 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
 
     }
 
+    readPagination(number:number):Promise<any>{
+        return new Promise(async(resolve,reject)=>{
+            const connect = await this.client.connect();
+            const res = await this.client.query(`SELECT * FROM products  ORDER BY product_id ASC limit 5 offset ${number*5}`);
+           const totalRes = await this.client.query(`select count(product_id) from products`);
+            
+            resolve({rows:res.rows,total:totalRes.rows[0].count,sizepaginationPage:5,currentpage:number+1});
+            connect.release();
+        })
+    }
+
 }

@@ -54,6 +54,10 @@ export class OrderDbService{
         return this.orderRespository.deleteOrder(id);
     
     }
+    readPagination(number:any){
+        
+        return this.orderRespository.readPagination(number);
+    }
 
 
 }

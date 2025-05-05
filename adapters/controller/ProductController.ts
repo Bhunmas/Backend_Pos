@@ -35,21 +35,21 @@ export function createProductController( postgresProduct: OrderDbService) {
         res.status(200).send(result);
     });
 
-    router.get(`/products/:id`, async (_req: Request, res: Response) => {
+    // router.get(`/products/:id`, async (_req: Request, res: Response) => {
 
-        const result = await postgresProduct.readOne(Number(_req.params.id)).then((res) => {
+    //     const result = await postgresProduct.readOne(Number(_req.params.id)).then((res) => {
 
-            return { "message": "Success", "statusCode": 200, "result": res }
+    //         return { "message": "Success", "statusCode": 200, "result": res }
 
-        }).catch((err) => {
-            // set error and error response 
-            if (err == "error") return { "message": "Data is not number", "statusCode": 404 }
-            if (err.rowCount <= 0) return { "message": "Data not found", "statusCode": 404 }
+    //     }).catch((err) => {
+    //         // set error and error response 
+    //         if (err == "error") return { "message": "Data is not number", "statusCode": 404 }
+    //         if (err.rowCount <= 0) return { "message": "Data not found", "statusCode": 404 }
 
-        });
+    //     });
 
-        res.status(200).send(result);
-    });
+    //     res.status(200).send(result);
+    // });
 
     router.get("/category/:category", async (_req: Request, res: Response) => {
         // wait api 
@@ -169,7 +169,13 @@ export function createProductController( postgresProduct: OrderDbService) {
         res.status(200).send(result);
     })
 
-
+    router.get('/products/:id',async(_req:Request,res:Response)=>{
+        console.log( _req.params)
+        const result = await postgresProduct.readPagination(Number(_req.params.id)).then((res)=>{
+            return {message:'Success',statuscode:200,result:res.rows,total:res.total,sizepaginationPage:res.sizepaginationPage,currentpage:res.currentpage}
+        })
+        res.status(200).send(result);
+    })
 
 
 

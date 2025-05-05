@@ -13,6 +13,8 @@ export interface IOrderDbResponsitory{
 
     updateOrder(value:OrderDb):Promise<any>;
     deleteOrder(id:number):Promise<any>;
+    readPagination(number:any):Promise<any>;
+
 
 
 }
