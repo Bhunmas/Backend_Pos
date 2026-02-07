@@ -1,8 +1,8 @@
 import { Router, Request, Response } from "express";
 import { CustomerService } from "../../core/services/CustomerService";
+import { AuthorizationService } from "../../core/services/utility/AuthorizationService";
 
-
-export function createCustomerController(customerService:CustomerService) {
+export function createCustomerController(customerService:CustomerService,authorizationService:AuthorizationService) {
     const router = Router();
 
     router.post("/customers", (req: Request, res: Response) => {

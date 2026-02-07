@@ -17,6 +17,8 @@
   },
   "homepage": "https://github.com/Bhunmas/Backend_Pos#readme",
   "devDependencies": {
+    "@types/jsonwebtoken": "^9.0.10",
+    "@types/luxon": "^3.7.1",
     "@types/node": "^22.13.10",
     "prettier": "3.5.3",
     "typescript": "^5.8.2"
@@ -26,7 +28,8 @@
     "crypto": "^1.0.1",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
-    "luxon": "^3.5.0",
+    "jsonwebtoken": "^9.0.3",
+    "luxon": "^3.7.2",
     "mysql2": "^3.14.0",
     "pg": "^8.14.1",
     "zlib": "^1.0.5"

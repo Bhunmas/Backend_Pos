@@ -29,7 +29,7 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
     readAll(): Promise<OrderDb[]> {
         return new Promise(async (resolve, reject) => {
             const connect = await this.client.connect();
-            const res = await this.client.query('SELECT * FROM products where active = true ORDER BY product_id ASC');
+            const res = await this.client.query('SELECT * FROM Products where active = true ORDER BY product_id ASC');
            
             
             resolve(res.rows);
@@ -86,11 +86,20 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
 
     addOrder(value: OrderDb): Promise<any> {
         return new Promise(async (resolve, reject) => {
-            const connect = await this.client.connect();
-            await console.log('postgre ',value)
-            const res = await this.client.query(`INSERT INTO products(product_name,price,category,image_url,active) values('${value.Order_name}',${value.Order_price},'${value.Order_category}','${value.Order_imageurl}',True)`);
-            resolve([]);
-            connect.release();
+            try{
+                 const connect = await this.client.connect();
+           
+                console.log('or',value)
+                const res = await this.client.query(`INSERT INTO Products(product_name,price,category,image_url,active) values($1,$2,$3,$4,$5) RETURNING *`,[value.Order_name,1,value.Order_category,value.Order_imageurl??null,true]);
+                console.log("res:", res);
+console.log("res.rows:", res.rows);
+console.log("res.rows[0]:", res.rows[0]);
+                resolve(res.rows);
+                connect.release();
+            }catch(error){
+                reject(error);
+            }
+           
         })
     }
     
@@ -154,10 +163,10 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
 
     }
 
-    readPagination(number:number):Promise<any>{
+    readPagination(number:any):Promise<any>{
         return new Promise(async(resolve,reject)=>{
             const connect = await this.client.connect();
-            const res = await this.client.query(`SELECT * FROM products  ORDER BY product_id ASC limit 5 offset ${number*5}`);
+            const res = await this.client.query(`SELECT * FROM products  ORDER BY product_id desc limit 5 offset ${number*5}`);
            const totalRes = await this.client.query(`select count(product_id) from products`);
             
             resolve({rows:res.rows,total:totalRes.rows[0].count,sizepaginationPage:5,currentpage:number+1});

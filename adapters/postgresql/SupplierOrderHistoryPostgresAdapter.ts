@@ -49,10 +49,10 @@ export class InPostgresqlSupplierHistoryRepository implements ISupplierHistoryOr
         })
     }
 
-    readPagination(number:number){
+    readPagination(number:any){
         return new Promise(async(resolve,reject)=>{
 
-            console.log( number)
+           
             const connect = await this.client.connect();
             const res = await this.client.query(`select id,e.employee_id,employee_name,vendor_id,vendor_name,items,order_date from purchase_orders  inner join vendor v on v.vendor_id = purchase_orders.supplier_id  inner join employees  e on e.employee_id = purchase_orders.employee_id  order by id desc limit 5 offset ${number*5}  `);
             const totalRes = await this.client.query(`select count(id) from purchase_orders`);

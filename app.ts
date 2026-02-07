@@ -17,7 +17,7 @@ import { MaterialService } from "./core/services/DbAws/MaterialService";
 import { SuppliersService } from "./core/services/DbAws/SuppliersService";
 import { Vendor_MaterialService } from "./core/services/DbAws/Vendor_MaterialService";
 import { SupplierOrderHistoryService } from "./core/services/DbAws/SupplierOrderHistory";
-
+import { AuthorizationService } from "./core/services/utility/AuthorizationService";
 
 
 import { InMemoryProductRepository } from "./adapters/respositories/InMemoryProductRepository"; 
@@ -29,8 +29,7 @@ import  {  InPostgresqlMaterialRepository } from "./adapters/postgresql/Material
 import  {  InPostgresqlSuppliersRepository } from "./adapters/postgresql/SupplyPostgresAdapter"; 
 import  {  InPostgresqlVendor_MaterialRepository } from "./adapters/postgresql/Vendor_MaterialPostgresAdapter"; 
 import  {  InPostgresqlSupplierHistoryRepository } from "./adapters/postgresql/SupplierOrderHistoryPostgresAdapter"; 
-
-
+import  {  AuthorizationAdapter } from "./adapters/utility/AuthorizationAdapter"; 
 import express from "express";
 import { create } from "node:domain";
 const cors = require('cors');
@@ -76,12 +75,13 @@ const supplierOrderHistoryPostgresqlRespository = new InPostgresqlSupplierHistor
 const supplierOrderHistoryPostgresqlService = new SupplierOrderHistoryService(supplierOrderHistoryPostgresqlRespository)
 
 // ✅ สร้าง Controller
-
+const authorizationResponsitory = new AuthorizationAdapter(process.env.JWT_SECRET,"1h");
+const authorizationService = new AuthorizationService(authorizationResponsitory);
 // ✅ เชื่อม Express กับ Controller
 
 app.use("/products", createProductController(productPostgresqlService));
-app.use("/customers", createCustomerController(customerService));
-app.use("/employees",createEmployeeController(employeePostgresqlService));
+app.use("/customers", createCustomerController(customerService,authorizationService));
+app.use("/employees",createEmployeeController(employeePostgresqlService,authorizationService));
 app.use('/transactions', createTransactionController(transactionPostgresqlService));
 app.use('/materials',createMaterialController(materialPostgresqlService));
 app.use('/suppliers',createSupplyController(suppliersPostgresqlService));

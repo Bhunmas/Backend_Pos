@@ -8,7 +8,7 @@ export class ProductService{
 
     addProduct(id:string,name:string):void{
         const product = new Product(id,name);
-        console.log(product);
+       
         this.productResponsitory.add(product);
     }
     
