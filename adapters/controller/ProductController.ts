@@ -2,9 +2,9 @@ import { Router, Request, Response } from "express";
 import { OrderDbService } from "../../core/services/DbAws/OrderDbService";
 import { stat } from "fs";
 import { OrderDb } from "../../core/entites/DbAws/OrderDb";
+import { AuthorizationService } from "../../core/services/utility/AuthorizationService";
 
-
-export function createProductController( postgresProduct: OrderDbService) {
+export function createProductController( postgresProduct: OrderDbService,authorizationService:AuthorizationService) {
     const router = Router();
 
     // router.post("/products", async (req: Request, res: Response) => {
@@ -17,7 +17,7 @@ export function createProductController( postgresProduct: OrderDbService) {
     //     // res.status(201).send({ message: "Product added", id: req.body.Order_id, name: req.body.Order_name });
     // });
 
-    router.get("/products", async (_req: Request, res: Response) => {
+    router.get("/products",authorizationService.authMiddleware.bind(authorizationService), async (_req: Request, res: Response) => {
         // wait api 
         const result = await postgresProduct.readOrder().then((res) => {
             return { "message": "Success", "statusCode": 200, "result": res }
@@ -26,7 +26,7 @@ export function createProductController( postgresProduct: OrderDbService) {
         res.status(200).send(result);
     });
 
-    router.get("/products/table", async (_req: Request, res: Response) => {
+    router.get("/products/table",authorizationService.authMiddleware.bind(authorizationService), async (_req: Request, res: Response) => {
         // wait api 
         const result = await postgresProduct.readOrderTable().then((res) => {
             return { "message": "Success", "statusCode": 200, "result": res }
@@ -51,7 +51,7 @@ export function createProductController( postgresProduct: OrderDbService) {
     //     res.status(200).send(result);
     // });
 
-    router.get("/category/:category", async (_req: Request, res: Response) => {
+    router.get("/category/:category",authorizationService.authMiddleware.bind(authorizationService), async (_req: Request, res: Response) => {
         // wait api 
         try {
             switch (_req.params.category) {
@@ -88,7 +88,7 @@ export function createProductController( postgresProduct: OrderDbService) {
 
     });
 
-    router.post("/create", async (_req: Request, res: Response) => {
+    router.post("/create",authorizationService.authMiddleware.bind(authorizationService), async (_req: Request, res: Response) => {
         // wait api 
         console.log('_req',_req.body)
         const result = await postgresProduct.addOrder(
@@ -106,7 +106,7 @@ export function createProductController( postgresProduct: OrderDbService) {
         res.status(200).send(result);
     });
 
-    router.patch("/update", async (_req: Request, res: Response) => {
+    router.patch("/update",authorizationService.authMiddleware.bind(authorizationService), async (_req: Request, res: Response) => {
         // wait api 
         const req:OrderDb = new OrderDb(_req.body.Order_id, _req.body.Order_name, _req.body.Order_price,_req.body.Order_category, _req.body.Order_active, null   ); 
         console.log('_req :', _req.body)
@@ -131,7 +131,7 @@ export function createProductController( postgresProduct: OrderDbService) {
      
     });
 
-    router.patch("/active", async (_req: Request, res: Response) => {
+    router.patch("/active",authorizationService.authMiddleware.bind(authorizationService), async (_req: Request, res: Response) => {
         // wait api 
       
         const result = await postgresProduct.active(
@@ -146,7 +146,7 @@ export function createProductController( postgresProduct: OrderDbService) {
      
     });
     
-    router.patch("/inactive", async (_req: Request, res: Response) => {
+    router.patch("/inactive",authorizationService.authMiddleware.bind(authorizationService), async (_req: Request, res: Response) => {
         // wait api 
       
         const result = await postgresProduct.inactive(
@@ -162,14 +162,14 @@ export function createProductController( postgresProduct: OrderDbService) {
     });
 
 
-    router.delete(`/delete/:id`,async(_req:Request,res:Response)=>{
+    router.delete(`/delete/:id`,authorizationService.authMiddleware.bind(authorizationService),async(_req:Request,res:Response)=>{
         const result = await postgresProduct.delete(_req.params.id).then((res)=>{
             return { "message": "Success", "statusCode": 200 };
         })
         res.status(200).send(result);
     })
 
-    router.get('/products/:id',async(_req:Request,res:Response)=>{
+    router.get('/products/:id',authorizationService.authMiddleware.bind(authorizationService),async(_req:Request,res:Response)=>{
         console.log( _req.params)
         const result = await postgresProduct.readPagination(Number(_req.params.id)).then((res)=>{
             return {message:'Success',statuscode:200,result:res.rows,total:res.total,sizepaginationPage:res.sizepaginationPage,currentpage:res.currentpage}

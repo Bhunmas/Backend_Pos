@@ -1,14 +1,16 @@
 import { Router, Request, Response } from 'express';
 import { TransactionService } from '../../core/services/DbAws/TransactionService';
 import { buffer, json } from 'stream/consumers';
+import { AuthorizationService } from "../../core/services/utility/AuthorizationService";
 const zlib = require('zlib');
 const crypto = require('crypto');
 export function createTransactionController(
-  postgresTransactionService: TransactionService
+  postgresTransactionService: TransactionService,
+  authorizationService:AuthorizationService
 ) {
   const router = new Router();
 
-  router.get('/transactions', async (_req: Request, res: Response) => {
+  router.get('/transactions',authorizationService.authMiddleware.bind(authorizationService), async (_req: Request, res: Response) => {
     const result = await postgresTransactionService
       .readAll()
       .then((res) => {
@@ -20,7 +22,7 @@ export function createTransactionController(
     res.status(200).send(result);
   });
 
-  router.post('/create', async (_req: Request, res: Response) => {
+  router.post('/create',authorizationService.authMiddleware.bind(authorizationService), async (_req: Request, res: Response) => {
     const result = await postgresTransactionService
       .create({
         Transaction_id: Number(_req.body.Transaction_id),
@@ -39,7 +41,7 @@ export function createTransactionController(
     res.status(200).send(result);
   });
 
-  router.get('/transactions/table', async (_req: Request, res: Response) => {
+  router.get('/transactions/table',authorizationService.authMiddleware.bind(authorizationService), async (_req: Request, res: Response) => {
     const result = await postgresTransactionService
       .readTable()
       .then((res) => {
@@ -50,7 +52,7 @@ export function createTransactionController(
       });
     res.status(200).send(result);
   });
-  router.get('/transactions/test', async (_req: Request, res: Response) => {
+  router.get('/transactions/test',authorizationService.authMiddleware.bind(authorizationService), async (_req: Request, res: Response) => {
     const  text = [
       {
         "menu": "Classic Milk Tea",

@@ -79,14 +79,14 @@ const authorizationResponsitory = new AuthorizationAdapter(process.env.JWT_SECRE
 const authorizationService = new AuthorizationService(authorizationResponsitory);
 // ✅ เชื่อม Express กับ Controller
 
-app.use("/products", createProductController(productPostgresqlService));
+app.use("/products", createProductController(productPostgresqlService,authorizationService));
 app.use("/customers", createCustomerController(customerService,authorizationService));
 app.use("/employees",createEmployeeController(employeePostgresqlService,authorizationService));
-app.use('/transactions', createTransactionController(transactionPostgresqlService));
-app.use('/materials',createMaterialController(materialPostgresqlService));
-app.use('/suppliers',createSupplyController(suppliersPostgresqlService));
-app.use('/vendor_material',createVendor_materialController(vendor_materialService));
-app.use('/supplierorderhistory',createSupplierOrderHistoryController(supplierOrderHistoryPostgresqlService));
+app.use('/transactions', createTransactionController(transactionPostgresqlService,authorizationService));
+app.use('/materials',createMaterialController(materialPostgresqlService,authorizationService));
+app.use('/suppliers',createSupplyController(suppliersPostgresqlService,authorizationService));
+app.use('/vendor_material',createVendor_materialController(vendor_materialService,authorizationService));
+app.use('/supplierorderhistory',createSupplierOrderHistoryController(supplierOrderHistoryPostgresqlService,authorizationService));
 
 
 

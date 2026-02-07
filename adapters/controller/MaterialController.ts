@@ -1,9 +1,9 @@
 import { Router, Request, Response } from "express";
 import { MaterialService } from "../../core/services/DbAws/MaterialService";
-
-export function  createMaterialController(postgresMaterial:MaterialService){
+import { AuthorizationService } from "../../core/services/utility/AuthorizationService";
+export function  createMaterialController(postgresMaterial:MaterialService,authorizationService:AuthorizationService){
     const router = Router();
-    router.get("/materials",async (_req: Request, res: Response) => {
+    router.get("/materials",authorizationService.authMiddleware.bind(authorizationService),async (_req: Request, res: Response) => {
 
         const result = await postgresMaterial.readAll().then((res) => {
             return { "message": "Success", "statusCode": 200, "result": res }
@@ -11,10 +11,10 @@ export function  createMaterialController(postgresMaterial:MaterialService){
         res.status(200).send(result);
     });
 
-    router.get("/materials/table", (_req: Request, res: Response) => {
+    router.get("/materials/table",authorizationService.authMiddleware.bind(authorizationService), (_req: Request, res: Response) => {
     });
 
-    router.get("/materials/:id",async (_req: Request, res: Response) => {
+    router.get("/materials/:id",authorizationService.authMiddleware.bind(authorizationService),async (_req: Request, res: Response) => {
 
         const result = await postgresMaterial.readById(Number(_req.params.id)).then((res) => {
             return { "message": "Success", "statusCode": 200, "result": res }
@@ -24,7 +24,7 @@ export function  createMaterialController(postgresMaterial:MaterialService){
 
 
 
-    router.get("/category/:category",async (_req: Request, res: Response) => {
+    router.get("/category/:category",authorizationService.authMiddleware.bind(authorizationService),async (_req: Request, res: Response) => {
         try{
             switch(_req.params.category){
                 case "Tea":
@@ -52,14 +52,14 @@ export function  createMaterialController(postgresMaterial:MaterialService){
 
         }
     });
-    router.post("/create", async (_req: Request, res: Response) => {
+    router.post("/create",authorizationService.authMiddleware.bind(authorizationService), async (_req: Request, res: Response) => {
         console.log("create",_req.body)
         const result = await postgresMaterial.create(_req.body).then((res)=>{
             return { "message": "Success", "statusCode": 200 }
         });
         res.status(200).send(result);
     });
-    router.patch("/update", async(_req: Request, res: Response) => {
+    router.patch("/update",authorizationService.authMiddleware.bind(authorizationService), async(_req: Request, res: Response) => {
         console.log('req',_req.body)
         const result = await postgresMaterial.update(_req.body).then((res)=>{
             return { "message": "Success", "statusCode": 200 }
@@ -67,7 +67,7 @@ export function  createMaterialController(postgresMaterial:MaterialService){
         res.status(200).send(result);
     });
 
-    router.delete(`/delete/:id`, async(_req: Request, res: Response) => {
+    router.delete(`/delete/:id`,authorizationService.authMiddleware.bind(authorizationService), async(_req: Request, res: Response) => {
         const result = await postgresMaterial.delete(_req.params.id).then((res)=>{
             return { "message": "Success", "statusCode": 200 }
         });

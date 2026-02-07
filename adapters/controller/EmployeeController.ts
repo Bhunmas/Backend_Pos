@@ -106,7 +106,7 @@ export function createEmployeeController(postgresEmployee: EmployeeService,autho
   },
 );
   // update employee
-  router.patch(`/update`, async(_req: Request, res: Response) => {
+  router.patch(`/update`,authorizationService.authMiddleware.bind(authorizationService), async(_req: Request, res: Response) => {
     const request: Employee = new Employee(
       _req.body.employee_id,
       _req.body.employee_name,
@@ -133,11 +133,11 @@ export function createEmployeeController(postgresEmployee: EmployeeService,autho
   });
 
   // active and inactive employee
-  router.patch(`/active`, (_req: Request, res: Response) => {
+  router.patch(`/active`,authorizationService.authMiddleware.bind(authorizationService), (_req: Request, res: Response) => {
     res.status(200).send({ message: 'Hello World' });
   });
 
-  router.patch(`/inactive`, (_req: Request, res: Response) => {
+  router.patch(`/inactive`,authorizationService.authMiddleware.bind(authorizationService), (_req: Request, res: Response) => {
     res.status(200).send({ message: 'Hello World' });
   });
 
