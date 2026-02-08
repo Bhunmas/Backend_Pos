@@ -84,16 +84,15 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
         })
     }
 
-    addOrder(value: OrderDb): Promise<any> {
+    addOrder(value: any): Promise<any> {
         return new Promise(async (resolve, reject) => {
             try{
                  const connect = await this.client.connect();
            
                 console.log('or',value)
-                const res = await this.client.query(`INSERT INTO Products(product_name,price,category,image_url,active) values($1,$2,$3,$4,$5) RETURNING *`,[value.Order_name,1,value.Order_category,value.Order_imageurl??null,true]);
-                console.log("res:", res);
-console.log("res.rows:", res.rows);
-console.log("res.rows[0]:", res.rows[0]);
+                const res = await this.client.query(`INSERT INTO Products(product_name,price,category,image_url,active) values($1,$2,$3,$4,$5) RETURNING *`,[value.product_name,value.product_price,value.product_category,value.product_imageurl??null,true]);
+                console.log("res:ss", res);
+
                 resolve(res.rows);
                 connect.release();
             }catch(error){
@@ -107,13 +106,14 @@ console.log("res.rows[0]:", res.rows[0]);
         return new Promise(async (resolve, reject) => {
             try{
                 const connect = await this.client.connect();
-                console.log('values :',value);
-                const seachResult = await  this.client.query(`Select * from Products where product_id = ${value.Order_id}`);
+                const seachResult = await  this.client.query(`Select * from Products where product_id = ${value.product_id}`);
+                console.log('seachResultdasd :',seachResult);
                 if(seachResult.rows <= 0) throw Error('Data not found');
                
-            const res = await this.client.query(`Update Products set product_name = '${value.Order_name}',price =${value.Order_price} ,category ='${value.Order_category}' ,image_url = '${value.Order_imageurl}'  , active ='${value.Order_active} ' where product_id = ${value.Order_id} `);
+            const res = await this.client.query(`Update Products set product_name = '${value.product_name}',price =${value.product_price} ,category ='${value.product_category}' ,image_url = '${value.product_imageurl}'  , active ='${value.product_active} ' where product_id = ${value.product_id} `);
                 if(res.rowCount <= 0 ) reject(res);
                 resolve(res);
+    
                 connect.release();
             }catch(error){
                 reject(error);

@@ -112,8 +112,7 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
             
                 if(value.email == null || value.password == null)  reject({errorcode:10,message:"email or password is null",status:400})
                 const search = await this.client.query(`select * from employees where email = '${value.email}' and employee_password = '${value.password}'`);
-                console.log("search",search)
-                if(search.rows < 0) reject ({errorcode:10,message:"email or password is incorrect",status:400})
+                if(search.rows <= 0) reject ({errorcode:10,message:"email or password is incorrect",status:400})
                 // await this.client.query(`insert into tokens(user_id,token,expires_at) values('${search.rows[0].employee_id}','eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9','2025-04-12 10:00:00')`);
               
                 resolve({id:search.rows[0].employee_id,user:search.rows[0].employee_name,permission:search.rows[0].position});

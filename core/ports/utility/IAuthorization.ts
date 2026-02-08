@@ -5,5 +5,5 @@ export interface IAuthorization{
 
     
     authMiddleware(req: Request, res: Response, next: NextFunction):void;
-    generate(payload: any): string;
+    generate(payload: any,secertKey:string,expire:string): string;
 }

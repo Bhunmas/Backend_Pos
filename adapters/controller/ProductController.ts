@@ -93,12 +93,12 @@ export function createProductController( postgresProduct: OrderDbService,authori
         console.log('_req',_req.body)
         const result = await postgresProduct.addOrder(
             {
-                Order_id: _req.body.product_id,
-                Order_name: _req.body.product_name,
-                Order_price: _req.body.price,
-                Order_category: _req.body.category,
-                Order_active: true,
-                Order_imageurl:_req.body.image
+                product_id:null,
+                product_name: _req.body.product_name,
+                product_price: _req.body.product_price,
+                product_category: _req.body.product_category,
+                product_active: true,
+                product_imageurl:_req.body.product_imageurl
             }).then((res) => {
                 return { "message": "Success", "statusCode": 200, "result": res }
             })
@@ -112,12 +112,12 @@ export function createProductController( postgresProduct: OrderDbService,authori
         console.log('_req :', _req.body)
         const result = await postgresProduct.updateOrder(
             {
-                Order_id: _req.body.product_id,
-                Order_name: _req.body.product_name,
-                Order_price: _req.body.price,
-                Order_category: _req.body.category,
-                Order_active: _req.body.active,
-                Order_imageurl: _req.body.image
+                product_id: _req.body.product_id,
+                product_name: _req.body.product_name,
+                product_price: _req.body.product_price,
+                product_category: _req.body.product_category,
+                product_active: _req.body.product_active,
+                product_imageurl: "dsad"
             }).then((res) => {
                 return { "message": "Success", "statusCode": 200}
             }).catch((res)=>{
@@ -135,7 +135,7 @@ export function createProductController( postgresProduct: OrderDbService,authori
         // wait api 
       
         const result = await postgresProduct.active(
-            _req.body.Order_id).then((res) => {
+            _req.body.product_id).then((res) => {
                 return { "message": "Success", "statusCode": 200 }
             }).catch((res)=>{
                 if(res.rowCount <= 0) return { "message": "Data not found", "statusCode": 404 }
@@ -150,7 +150,7 @@ export function createProductController( postgresProduct: OrderDbService,authori
         // wait api 
       
         const result = await postgresProduct.inactive(
-           _req.body.Order_id).then((res) => {
+           _req.body.product_id).then((res) => {
                 return { "message": "Success", "statusCode": 200 }
             }).catch((res)=>{
                 if(res.rowCount <= 0) return { "message": "Data not found", "statusCode": 404 }
@@ -169,13 +169,32 @@ export function createProductController( postgresProduct: OrderDbService,authori
         res.status(200).send(result);
     })
 
-    router.get('/products/:id',authorizationService.authMiddleware.bind(authorizationService),async(_req:Request,res:Response)=>{
+
+     router.get('/products/:id',authorizationService.authMiddleware.bind(authorizationService),async(_req:Request,res:Response)=>{
         console.log( _req.params)
-        const result = await postgresProduct.readPagination(Number(_req.params.id)).then((res)=>{
-            return {message:'Success',statuscode:200,result:res.rows,total:res.total,sizepaginationPage:res.sizepaginationPage,currentpage:res.currentpage}
-        })
-        res.status(200).send(result);
+     
+        try{
+            const result = await postgresProduct.readOne(Number(_req.params.id))
+            res.status(200).send(result);
+        }
+        catch (err: any) {
+            console.log("err",err)
+        if (err.errorcode === 10) {
+             res.status(404).json({ message: err.message });
+        }
+         res.status(404).json({ message: "item don't exist " });
+       
+        
+    }
+       
     })
+    // router.get('/products/:id',authorizationService.authMiddleware.bind(authorizationService),async(_req:Request,res:Response)=>{
+    //     console.log( _req.params)
+    //     const result = await postgresProduct.readPagination(Number(_req.params.id)).then((res)=>{
+    //         return {message:'Success',statuscode:200,result:res.rows,total:res.total,sizepaginationPage:res.sizepaginationPage,currentpage:res.currentpage}
+    //     })
+    //     res.status(200).send(result);
+    // })
 
 
 

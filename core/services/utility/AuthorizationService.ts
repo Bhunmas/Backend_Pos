@@ -12,10 +12,12 @@ export class AuthorizationService{
     authMiddleware(req:Request,res:Response,next:NextFunction){
         return this.authorizationResposity.authMiddleware(req,res,next)
     }
-    generateToken(user: any): string {
+    generateToken(user: any,secertKey:string,expire:string): string {
         return this.authorizationResposity.generate({
       userId: user.id,
       email: user.email,
-    });
+      
+    },secertKey,
+  expire);
   }
 }

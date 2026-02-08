@@ -1,8 +1,16 @@
+// library
 import { Router,  Request, Response, NextFunction } from 'express';
+import { DateTime } from 'luxon';
+
+// service
 import { EmployeeService } from '../../core/services/DbAws/EmployeeService';
 import { AuthorizationService } from "../../core/services/utility/AuthorizationService";
+
+//port model
 import { Employee } from '../../core/entites/DbAws/Employee';
 import { LoginEmployee } from '../../core/entites/DbAws/LoginEmployee';
+
+
 
 export function createEmployeeController(postgresEmployee: EmployeeService,authorizationService:AuthorizationService) {
   const router = Router();
@@ -32,16 +40,7 @@ export function createEmployeeController(postgresEmployee: EmployeeService,autho
   });
   // create employee
   router.post(`/create`, async (_req: Request, res: Response) => {
-    const a = {
-      Employee_name: _req.body.Employee_name,
-      Employee_lastname: _req.body.Employee_lastname,
-      Employee_email: _req.body.email,
-      Employee_phone: _req.body.phone,
-      Employee_region: _req.body.region,
-      Employee_position: _req.body.position,
-      salary: _req.body.salary,
-      active: true,
-    };
+   
     const request: Employee = new Employee(
       1,
       _req.body.employee_name,
@@ -51,7 +50,7 @@ export function createEmployeeController(postgresEmployee: EmployeeService,autho
       _req.body.region,
       _req.body.position,
       _req.body.salary,
-      null,
+      _req.body.password,
       true
     );
 
@@ -80,14 +79,34 @@ export function createEmployeeController(postgresEmployee: EmployeeService,autho
    try{
 
     const result = await postgresEmployee.login(request);
-  
-    const token = authorizationService.generateToken(result);
-    res.setHeader("Authorization",`Bearer ${token}`).status(200).json({
-        token:token,
+    const refreshPayload = {
+      "userId":result.userId,
+    }
+    console.log('res',result)
+    const accessPayload = {
+      "userId": result.Id, 
+      "user": result.user,
+      "permission": result.permission,
+    }
+     console.log('accessPayload',accessPayload);
+    const refreshToken = authorizationService.generateToken(refreshPayload,process.env.REFRESH_SECRET,"refreshToken");
+    const accesstoken = authorizationService.generateToken(accessPayload,process.env.JWT_SECRET,"accessToken");
+    console.log('refreshToken',refreshToken);
+     console.log('accessToken',accesstoken);
+    res.cookie('jwt',refreshToken,{
+      httpOnly:true,
+      secure:process.env.NODE_ENV === 'production',
+      sameSite:'strict',
+      maxAge:7 * 24 * 60 * 60 * 1000,
+    })
+
+    res.setHeader('Authorization', `Bearer ${accesstoken}`).status(200).json({
        message: "Success",
+       statuscode: 200,
        result:result
     })
-     
+
+  
      
      } catch (err: any) {
       console.log("err",err)
@@ -116,8 +135,9 @@ export function createEmployeeController(postgresEmployee: EmployeeService,autho
       _req.body.region,
       _req.body.position,
       _req.body.salary,
-      null,
-      _req.body.active
+     _req.body.password,
+      _req.body.active,
+  
     );
     const result = await postgresEmployee.update(request).then((res) => {
       return { message: 'Success', statuscode: 200 };

@@ -9,18 +9,19 @@ export class OrderDbService{
     
     addOrder(item:OrderDb){
         
-        const result = new OrderDb(item.Order_id,item.Order_name,item.Order_price,item.Order_category,item.Order_active,item.Order_imageurl);
+        const result = new OrderDb(item.product_id,item.product_name,item.product_price,item.product_category,item.product_active,item.product_imageurl);
         return  this.orderRespository.addOrder(result);
        
     }
-    updateOrder(item:OrderDb){
-        if(item.Order_imageurl == undefined){
+    updateOrder(item:any){
+        console.log('item : ',item);
+        if(item.product_imageurl == undefined){
             return new Promise((resolve,reject)=>{
                 reject({errorcode:10001,result:"image"})
             })
         }
-        const result = new OrderDb(item.Order_id,item.Order_name,item.Order_price,item.Order_category,item.Order_active,item.Order_imageurl);
-        return  this.orderRespository.updateOrder(result);
+       
+        return  this.orderRespository.updateOrder(item);
     }
 
     readOne(id:number){

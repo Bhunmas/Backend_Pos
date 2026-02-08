@@ -42,12 +42,12 @@ export class InOrderDbRespository implements IOrderDbResponsitory{
             result.statusCodeNumber = 200;
         }catch(err:any){
             if (err.code === "ConditionalCheckFailedException") {
-                console.error("❌ Error: Order_id already exists!");
+                console.error(" Error: Order_id already exists!");
             } else {
-                console.error("❌ Error:", err);
+                console.error(" Error:", err);
             }
         }
-        console.log("res :",result)
+        console.log("res :s",result)
         return result
        
         

@@ -5,20 +5,23 @@ import { Request, Response, NextFunction } from "express";
 import jwt,{ SignOptions } from "jsonwebtoken";
 
 export class AuthorizationAdapter {
-    private secretkey;
+    private secretKey;
     private expireTime;
-    constructor(secretkey:string,expireTime:string){
-        this.secretkey = secretkey;
+    private refreshKey;
+   
+    
+    constructor(secretKey:string,expireTime:string){
+        this.secretKey = secretKey;
         this.expireTime = expireTime;
     }
 
-    generate(payload: any):string{
+    generate(payload: any,secertKey:string,expire:string):string{
          const option : SignOptions = {
-            expiresIn:"1h"
+            expiresIn:expire == "refreshToken"?"1d":"1h"
         }
+     
         console.log("req:",payload)
-        const token = jwt.sign(payload,this.secretkey,option);
-      
+        const token = jwt.sign(payload,secertKey,option);
         return  token
     }
 
@@ -31,8 +34,8 @@ export class AuthorizationAdapter {
         }
         try{
             const token = authHeader.split(" ")[1];
-            console.log('token ',authHeader)
-            const payload = jwt.verify(token,this.secretkey);
+            console.log('token :',token)
+            const payload = jwt.verify(token,this.secretKey);
             (req as any).user = payload;
             next();
             
