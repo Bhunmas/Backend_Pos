@@ -9,7 +9,7 @@ export function  createMaterialController(postgresMaterial:MaterialService,autho
             return { "message": "Success", "statusCode": 200, "result": res }
         });
         res.status(200).send(result);
-    });
+    }); 
 
     router.get("/materials/table",authorizationService.authMiddleware.bind(authorizationService), (_req: Request, res: Response) => {
     });

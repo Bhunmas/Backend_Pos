@@ -53,7 +53,7 @@ export function createEmployeeController(postgresEmployee: EmployeeService,autho
       _req.body.password,
       true
     );
-
+   
     const result = await postgresEmployee
       .create(request)
       .then(() => {
@@ -100,7 +100,8 @@ export function createEmployeeController(postgresEmployee: EmployeeService,autho
       maxAge:7 * 24 * 60 * 60 * 1000,
     })
 
-    res.setHeader('Authorization', `Bearer ${accesstoken}`).status(200).json({
+    res.status(200).json({
+      Authorization: `Bearer ${accesstoken}`,
        message: "Success",
        statuscode: 200,
        result:result

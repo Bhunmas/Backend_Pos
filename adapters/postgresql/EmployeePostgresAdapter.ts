@@ -39,6 +39,9 @@ export class InPostgresqlEmployeeRepository implements IEmployeeRepository{
         return new Promise(async(resolve,reject)=>{
             const connect = await this.client.connect();
             try{
+                value.region="thailand";
+                value.salary=0;
+                value.password="1234";
                 console.log('value :',value)
                 await Object.keys(value).map((res)=>
                         value[res] == undefined || value[res] == null ? reject({errorcode:10,message:`${res} is null`,status:404}): value
