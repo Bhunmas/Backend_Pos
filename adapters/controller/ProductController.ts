@@ -95,14 +95,14 @@ export function createProductController( postgresProduct: OrderDbService,authori
             {
                 product_id:null,
                 product_name: _req.body.product_name,
-                product_price: _req.body.product_price,
-                product_category: _req.body.product_category,
+                product_price: _req.body.price,
+                product_category: _req.body.category,
                 product_active: true,
-                product_imageurl:_req.body.product_imageurl
+                product_imageurl:_req.body.imageurl
             }).then((res) => {
                 return { "message": "Success", "statusCode": 200, "result": res }
             })
-        
+          
         res.status(200).send(result);
     });
 
@@ -114,9 +114,9 @@ export function createProductController( postgresProduct: OrderDbService,authori
             {
                 product_id: _req.body.product_id,
                 product_name: _req.body.product_name,
-                product_price: _req.body.product_price,
-                product_category: _req.body.product_category,
-                product_active: _req.body.product_active,
+                product_price: _req.body.price,
+                product_category: _req.body.category,
+                product_active: _req.body.active,
                 product_imageurl: "dsad"
             }).then((res) => {
                 return { "message": "Success", "statusCode": 200}
