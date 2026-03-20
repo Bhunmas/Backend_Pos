@@ -31,7 +31,7 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
             const connect = await this.client.connect();
             const res = await this.client.query('SELECT * FROM Products where active = true ORDER BY product_id ASC');
            
-            console.log('ress',res)
+            
             resolve(res.rows);
             connect.release();
         })
@@ -72,7 +72,7 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
         return new Promise(async (resolve, reject) => {
             const connect = await this.client.connect();
             const res = await this.client.query(`SELECT * FROM products WHERE active = true and category = '${catagory}' ORDER BY  product_id ASC`);
-            console.log("Res :", catagory)
+            // console.log("Res :", catagory)
             if (res.rows.length <= 0) {
                 reject(res);
                 connect.release();
@@ -103,11 +103,12 @@ export class InPostgresqlProductRepository implements IOrderDbResponsitory {
     }
     
     updateOrder(value: any): Promise<any> {
+        console.log('value',value)
         return new Promise(async (resolve, reject) => {
             try{
                 const connect = await this.client.connect();
                 const seachResult = await  this.client.query(`Select * from Products where product_id = ${value.product_id}`);
-                console.log('seachResultdasd :',seachResult);
+               
                 if(seachResult.rows <= 0) throw Error('Data not found');
                
             const res = await this.client.query(`Update Products set product_name = '${value.product_name}',price =${value.product_price} ,category ='${value.product_category}' ,image_url = '${value.product_imageurl}'  , active ='${value.product_active} ' where product_id = ${value.product_id} `);

@@ -98,7 +98,7 @@ export function createProductController( postgresProduct: OrderDbService,authori
                 product_price: _req.body.price,
                 product_category: _req.body.category,
                 product_active: true,
-                product_imageurl:_req.body.imageurl
+                product_imageurl:_req.body.image
             }).then((res) => {
                 return { "message": "Success", "statusCode": 200, "result": res }
             })
@@ -117,16 +117,16 @@ export function createProductController( postgresProduct: OrderDbService,authori
                 product_price: _req.body.price,
                 product_category: _req.body.category,
                 product_active: _req.body.active,
-                product_imageurl: "dsad"
+                product_imageurl:_req.body.image
             }).then((res) => {
                 return { "message": "Success", "statusCode": 200}
             }).catch((res)=>{
-                console.log('res',res);
+             
                 if(res.errorcode == 10001) return { "message": res.result+" is null", "statusCode": 404 }
                 if(res.rowCount <= 0) return { "message": "Data not found", "statusCode": 404 }
                 return { "message": "Data not found", "statusCode": 404 }
             })
-        console.log("results :", result);
+        
         res.status(200).send(result);
      
     });
