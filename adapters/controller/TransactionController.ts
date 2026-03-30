@@ -9,7 +9,7 @@ export function createTransactionController(
   authorizationService:AuthorizationService
 ) {
   const router = new Router();
-
+  
   router.get('/transactions',authorizationService.authMiddleware.bind(authorizationService), async (_req: Request, res: Response) => {
     const result = await postgresTransactionService
       .readAll()
